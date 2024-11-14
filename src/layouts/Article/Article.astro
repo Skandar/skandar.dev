@@ -4,14 +4,17 @@ import type { CollectionEntry } from "astro:content";
 import ArticleHeader from "~/components/ArticleHeader/ArticleHeader.astro";
 import BaseLayout from "~/layouts/Base/Base.astro";
 import Container from "~/components/Container/Container.astro";
-import MoreLinks from "~/components/MoreLinks/MoreLinks.astro";
 import ShareArticle from "~/components/ShareArticle/ShareArticle.astro";
 import { styles } from "./Article.css";
 import ArticleFooter from "~/components/ArticleFooter/ArticleFooter.astro";
 
-type Props = CollectionEntry<"articles">["data"];
+type Props = CollectionEntry<"articles">["data"] & {
+  slug: string;
+  collection: string;
+};
 
-const { title, publishedTime, modifiedTime, tags } = Astro.props;
+const { title, publishedTime, modifiedTime, tags, slug, collection } =
+  Astro.props;
 ---
 
 <BaseLayout {...Astro.props}>
@@ -25,7 +28,7 @@ const { title, publishedTime, modifiedTime, tags } = Astro.props;
     <div class={styles.body}>
       <slot />
     </div>
-    <ArticleFooter />
+    <ArticleFooter slug={slug} collection={collection} />
   </Container>
   <ShareArticle title={title} />
 </BaseLayout>

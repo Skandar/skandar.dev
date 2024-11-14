@@ -23,11 +23,11 @@ export async function getStaticPaths() {
 
 type Props = CollectionEntry<"articles">;
 
-const { data, render } = Astro.props;
+const { data, render, slug, collection } = Astro.props;
 
 const { Content } = await render();
 ---
 
-<ArticleLayout {...data}>
+<ArticleLayout slug={slug} collection={collection} {...data}>
   <Content />
 </ArticleLayout>
