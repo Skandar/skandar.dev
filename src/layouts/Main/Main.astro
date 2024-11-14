@@ -1,0 +1,57 @@
+---
+import { getCollection } from "astro:content";
+
+import PageLayout from "~/layouts/Page/Page.astro";
+import Container from "~/components/Container/Container.astro";
+import { getNLastArticles } from "~/utils/getNLastArticles";
+import { getCollectionFilter } from "~/utils/getCollectionFilter";
+import ArticleList from "~/components/ArticleList/ArticleList.astro";
+import { DEFAULT_LANG, type Language } from "~/i18n/ui";
+import { useTranslations } from "~/i18n/utils";
+import { styles } from "./Main.css";
+
+const { currentLocale = DEFAULT_LANG } = Astro;
+const t = useTranslations(currentLocale as Language);
+
+const articles = await getCollection("articles", ({ data, slug }) =>
+  getCollectionFilter({
+    lang: currentLocale,
+    slug,
+    isDev: import.meta.env.DEV,
+    draft: data.draft,
+  }),
+);
+
+const lastArticles = getNLastArticles(articles, 10);
+---
+
+<PageLayout>
+  <section class={styles.hero}>
+    <Container>
+      <h1 id="hero" class={styles.heroTitle}>
+        <span>Aleksandr</span>
+        <span class={styles.heroSecondLine}>
+          Slugin
+          <span class={styles.heroDescription}>
+            <span>Front-</span>
+            <span>End</span>
+            <span>Developer</span>
+          </span>
+        </span>
+      </h1>
+    </Container>
+  </section>
+
+  {
+    articles.length > 0 && (
+      <section>
+        <Container>
+          <h2 class={styles.articlesTitle} id="last-articles">
+            {t("home.last-articles.title")}
+          </h2>
+          <ArticleList entries={lastArticles} />
+        </Container>
+      </section>
+    )
+  }
+</PageLayout>

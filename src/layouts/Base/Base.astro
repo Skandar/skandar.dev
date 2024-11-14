@@ -1,0 +1,27 @@
+---
+import type { CollectionEntry } from "astro:content";
+
+import BaseHead from "~/components/BaseHead.astro";
+import Footer from "~/components/Footer/Footer.astro";
+import Header from "~/components/Header/Header.astro";
+import { DEFAULT_LANG } from "~/i18n/ui";
+import { styles } from "./Base.css";
+
+type Props = Partial<CollectionEntry<"articles">["data"]>;
+
+const { currentLocale = DEFAULT_LANG } = Astro;
+---
+
+<!doctype html>
+<html lang={currentLocale}>
+  <head>
+    <BaseHead {...Astro.props} />
+  </head>
+  <body>
+    <Header />
+    <main class={styles.main}>
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>

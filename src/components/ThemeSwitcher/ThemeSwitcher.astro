@@ -1,0 +1,95 @@
+---
+import { DEFAULT_LANG, type Language } from "../../i18n/ui";
+import { useTranslations } from "../../i18n/utils";
+import { styles } from "./ThemeSwitcher.css";
+import { styles as buttonStyles } from "../Button/Button.css";
+import Button from "../Button/Button.astro";
+
+const { currentLocale = DEFAULT_LANG } = Astro;
+
+const t = useTranslations(currentLocale as Language);
+
+const buttons = [
+  { value: "light", label: t("theme.light"), pressed: false },
+  { value: "system", label: t("theme.system"), pressed: true },
+  { value: "dark", label: t("theme.dark"), pressed: false },
+];
+---
+
+<section>
+  <h2 class={styles.title} id="theme">{t("theme.title")}</h2>
+  <div
+    id="theme-switcher"
+    class={styles.wrapper}
+    aria-label={t("theme.label")}
+    data-filled-class={buttonStyles.variants.filled}
+    data-outline-class={buttonStyles.variants.outline}
+  >
+    {
+      buttons.map(({ value, label, pressed }) => (
+        <Button
+          size="small"
+          appearance={pressed ? "filled" : "outline"}
+          value={value}
+          aria-pressed={pressed}
+          class={styles.button}
+        >
+          {label}
+        </Button>
+      ))
+    }
+  </div>
+</section>
+
+<script is:inline>
+  const theme = localStorage.getItem("theme");
+
+  if (theme) {
+    document.documentElement.setAttribute("data-theme", theme);
+
+    const themeSwitcher = document.getElementById("theme-switcher");
+    const buttons = themeSwitcher.querySelectorAll("button");
+    // We can't import TS files in Astro, so we use data attributes to pass the class names
+    const filledButtonClass = themeSwitcher.dataset.filledClass;
+    const outlineButtonClass = themeSwitcher.dataset.outlineClass;
+
+    buttons.forEach((button) => {
+      if (button.getAttribute("value") === theme) {
+        button.setAttribute("aria-pressed", "true");
+        button.classList.replace(outlineButtonClass, filledButtonClass);
+      } else {
+        button.setAttribute("aria-pressed", "false");
+        button.classList.replace(filledButtonClass, outlineButtonClass);
+      }
+    });
+  }
+</script>
+
+<script>
+  const themeSwitcher = document.getElementById("theme-switcher")!;
+  const filledButtonClass = themeSwitcher.dataset.filledClass!;
+  const outlineButtonClass = themeSwitcher.dataset.outlineClass!;
+
+  themeSwitcher.addEventListener("click", (event: MouseEvent) => {
+    const target = event.target as HTMLButtonElement;
+    const activeTheme = target.getAttribute("value")!;
+
+    const buttons = document
+      .getElementById("theme-switcher")!
+      .querySelectorAll("button");
+
+    buttons.forEach((button) => {
+      if (button.getAttribute("value") === activeTheme) {
+        button.setAttribute("aria-pressed", "true");
+        button.classList.replace(outlineButtonClass, filledButtonClass);
+      } else {
+        button.setAttribute("aria-pressed", "false");
+        button.classList.replace(filledButtonClass, outlineButtonClass);
+      }
+    });
+
+    document.documentElement.setAttribute("data-theme", activeTheme);
+
+    localStorage.setItem("theme", activeTheme);
+  });
+</script>

@@ -1,0 +1,39 @@
+---
+import { getPathWithoutLocale } from "~/utils/getPathWithoutLocale";
+import { useTranslations } from "~/i18n/utils";
+import type { Language } from "~/i18n/ui";
+import NavLink from "../NavLink/NavLink.astro";
+import { styles } from "./ArticleFooter.css";
+import { DEFAULT_LANG } from "~/i18n/ui";
+
+const { url, currentLocale = DEFAULT_LANG } = Astro;
+
+const t = useTranslations(currentLocale as Language);
+
+const repoUrl = "https://github.com/Skandar/skandar.dev";
+
+const pathToArticle = getPathWithoutLocale(url.pathname);
+---
+
+<footer class={styles.container}>
+  <h4 class={styles.title}>{t("article.footer.title")}</h4>
+  <div class={styles.links}>
+    <NavLink
+      href=`${repoUrl}/blob/main/src/content/${pathToArticle}.mdx`
+      rel="noopener noreferrer"
+      target="_blank"
+    >
+      {t("article.footer.edit")}
+    </NavLink>
+    <NavLink href=`${repoUrl}/issues` rel="noopener noreferrer" target="_blank">
+      {t("article.footer.issue")}
+    </NavLink>
+    <NavLink
+      href=`${repoUrl}/discussions`
+      rel="noopener noreferrer"
+      target="_blank"
+    >
+      {t("article.footer.discussions")}
+    </NavLink>
+  </div>
+</footer>

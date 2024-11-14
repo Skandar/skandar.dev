@@ -1,0 +1,29 @@
+---
+import Container from "../Container/Container.astro";
+import Subscriptions from "../Subscriptions/Subscriptions.astro";
+import LangSwitcher from "../LangSwitcher/LangSwitcher.astro";
+import { styles } from "./Footer.css";
+import ThemeSwitcher from "../ThemeSwitcher/ThemeSwitcher.astro";
+import { DEFAULT_LANG, type Language } from "~/i18n/ui";
+import { useTranslations } from "~/i18n/utils";
+
+const { currentLocale = DEFAULT_LANG } = Astro;
+const t = useTranslations(currentLocale as Language);
+
+const startDate = 2024;
+const today = new Date().getFullYear();
+
+const years = today - startDate > 0 ? `${startDate}–${today}` : today;
+---
+
+<footer class={styles.footer}>
+  <Container>
+    <div class={styles.top}>
+      <LangSwitcher />
+      <ThemeSwitcher />
+      <Subscriptions />
+    </div>
+    &copy;
+    {`${years} ${t("meta.site")}. `}
+  </Container>
+</footer>

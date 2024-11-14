@@ -1,0 +1,56 @@
+---
+import { getCollection } from "astro:content";
+
+import PageLayout from "~/layouts/Page/Page.astro";
+import Container from "~/components/Container/Container.astro";
+import { getCollectionFilter } from "~/utils/getCollectionFilter";
+import TagList from "~/components/TagList/TagList.astro";
+import { DEFAULT_LANG, type Language } from "~/i18n/ui";
+import { useTranslations } from "~/i18n/utils";
+import { styles } from "./TagListPage.css";
+
+const isDev = import.meta.env.DEV;
+
+const { currentLocale = DEFAULT_LANG } = Astro;
+
+const t = useTranslations(currentLocale as Language);
+
+const articles = await getCollection("articles", ({ data, slug }) =>
+  getCollectionFilter({
+    lang: currentLocale,
+    slug,
+    isDev,
+    draft: Boolean(data.draft),
+  }),
+);
+
+const entriesMap = articles.reduce(
+  (acc, article) => {
+    const tags = article.data.tags || [];
+
+    for (const tag of tags) {
+      if (acc[tag]) {
+        acc[tag].total += 1;
+      } else {
+        acc[tag] = {
+          title: tag,
+          tag: tag.toLocaleLowerCase().split(" ").join("-"),
+          total: 1,
+        };
+      }
+    }
+
+    return acc;
+  },
+  {} as Record<string, { title: string; tag: string; total: number }>,
+);
+
+const entries = Object.values(entriesMap);
+---
+
+<PageLayout>
+  <Container>
+    <h1 class={styles.title} id="tags">{t("tags.title")}</h1>
+    <TagList entries={entries} />
+  </Container>
+</PageLayout>

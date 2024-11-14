@@ -1,0 +1,23 @@
+{
+  "name": "skandar.dev",
+  "description": "Articles about front-end, web development, CSS, JS, React, and more",
+  "lang": "en",
+  "dir": "ltr",
+  "id": "/",
+  "start_url": "/",
+  "theme_color": "#1d1f21",
+  "display": "browser",
+  "orientation": "natural",
+  "icons": [
+    {
+      "src": "/images/favicon/web-app-manifest-192x192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "/images/favicon/web-app-manifest-512x512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ]
+}

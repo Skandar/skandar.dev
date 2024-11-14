@@ -1,0 +1,113 @@
+---
+title: "În căutarea glifelor pierdute"
+description: "Atunci când adăugați suport pentru o limba nouă în aplicație, unele litere din text nu sunt afișate așa cum vă așteptați. Să vedem de ce s-a întâmplat asta și cum să rezolvăm problema."
+publishedTime: "Jul 01 2022"
+modifiedTime: "Aug 14 2023"
+tags: ["Browser", "CSS", "Typography", "Debugging"]
+ogImage: "/images/in-search-of-the-lost-glyphs/ro.jpg"
+---
+
+import { Picture, Image } from "astro:assets";
+
+import buttonImageSvg from "~/images/in-search-of-the-lost-glyphs/button.svg";
+import ChromeScreenshot from "~/images/in-search-of-the-lost-glyphs/chrome.png";
+import FFScreenshot from "~/images/in-search-of-the-lost-glyphs/firefox.png";
+import SafariScreenshot from "~/images/in-search-of-the-lost-glyphs/safari.png";
+import { breakpoints } from "~/styles/tokens";
+
+Imaginează-ți o situație: ai adăugat suport pentru o limbă nouă în aplicație și observi că unele litere din text nu se afișează așa cum te aștepți.
+
+<Image
+  src={buttonImageSvg}
+  width={500}
+  height={144}
+  alt="Butonul cu text în care unele litere diferă vizual de celelalte"
+  style={{ aspectRatio: "500 / 144" }}
+  loading="eager"
+/>
+
+Hai să analizăm de ce s-a întâmplat acest lucru și cum îl putem remedia.
+
+## Unde a apărut problema?
+
+Există câteva motive posibile pentru acest comportament al browserului:
+
+1. Fontul utilizat nu conține glife pentru simbolurile din texte, iar browserul folosește glife din fontul de rezervă.
+2. Am setat explicit `unicode-range` și am indicat un interval care nu include toate simbolurile utilizate. Drept urmare, browserul folosește doar glifele pentru simbolurile specificate în `unicode-range`, iar pentru celelalte simboluri face fallback la fontul de rezervă.
+
+Putem vedea ce fonturi folosește browserul pentru randare în Developer Tools al browserului (în continuare DevTools).
+
+### Chrome
+
+În Chrome putem vedea ce fonturi au fost utilizate pentru randarea textului și câte simboluri din fiecare font au fost folosite. Pentru a găsi această informație în DevTools:
+
+1. Selectăm elementul de pe pagină care are probleme cu fontul.
+2. Mergem la „Elements” → „Computed” și în partea de jos al tabului vom vedea secțiunea „Rendered Fonts” cu lista fonturilor folosite pentru elementul selectat. Aici este indicat chiar și numărul de glife utilizate din fiecare font.
+
+<Picture
+  src={ChromeScreenshot}
+  widths={[480, 720, 960, 1015, 1440, 2030]}
+  sizes={`(min-width: ${breakpoints.xs}) 100vw, 480px`}
+  formats={["avif", "webp"]}
+  quality={70}
+  alt="Chrome DevTools cu informații despre fonturile folosite pentru randarea textului"
+  pictureAttributes={{
+    style: {
+      aspectRatio: `${ChromeScreenshot.width} / ${ChromeScreenshot.height}`,
+    },
+  }}
+/>
+
+### Firefox
+
+Firefox nu indică câte simboluri din fiecare font au fost folosite, dar la trecerea cursorului peste font, simbolurile pentru care s-au folosit glife din acel font vor fi evidențiate în text. Pentru a găsi această informație în DevTools:
+
+1. Selectăm elementul de pe pagină care are probleme cu fontul.
+2. Mergem la „Inspector” → „Fonts” și în secțiunea „Fonts Used” vedem lista fonturilor utilizate în elementul selectat.
+
+<Picture
+  src={FFScreenshot}
+  widths={[480, 720, 960, 1015, 1440, 2030]}
+  sizes={`(min-width: ${breakpoints.xs}) 100vw, 480px`}
+  formats={["avif", "webp"]}
+  quality={70}
+  alt="Firefox DevTools with information about fonts used for rendering text"
+  pictureAttributes={{
+    style: {
+      aspectRatio: `${FFScreenshot.width} / ${FFScreenshot.height}`,
+    },
+  }}
+/>
+
+### Safari
+
+Safari arată doar fontul care a fost aplicat elementului, dar nu și fonturile din care au fost preluate glifele pentru text. Pentru a găsi această informație în DevTools:
+
+1. Selectăm elementul de pe pagină care are probleme cu fontul.
+2. Mergem la „Elements” → „Fonts” și în secțiunea „Identity” vom vedea fontul care a fost aplicat elementului.
+
+<Picture
+  src={SafariScreenshot}
+  widths={[480, 720, 960, 1015, 1440, 2030]}
+  sizes={`(min-width: ${breakpoints.xs}) 100vw, 480px`}
+  formats={["avif", "webp"]}
+  quality={70}
+  alt="Вкладка Fonts в DevTools Safari с информацией о шрифте, применённом к элементу"
+  pictureAttributes={{
+    style: {
+      aspectRatio: `${SafariScreenshot.width} / ${SafariScreenshot.height}`,
+    },
+  }}
+/>
+
+Textul poate fi format integral din simboluri pentru care nu există glife în fontul aplicat, iar în tabul „Fonts” va fi afișat fontul care a fost aplicat elementului, dar din acest font nu a fost utilizată nicio glifă.
+
+## Cum se remediază?
+
+Ce putem face pentru a evita un astfel de bug:
+
+- Corectăm intervalul în `unicode-range`.
+- Folosim un alt font care are toate glifele necesare.
+- Adăugăm în fontul utilizat glifele care lipsesc. Inițial, fontul ar fi putut avea toate glifele necesare, dar pentru a reduce dimensiunea fontului am eliminat glifele inutile. Verifică, poate folosești exact această versiune optimizată a fontului.
+
+În unele situații, nu putem face mare lucru, de exemplu atunci când utilizatorul are posibilitatea de a adăuga conținut. În acest caz, el poate adăuga text în orice limbă și cu orice set de simboluri. Într-o astfel de situație, nu vom putea găsi un singur font care să includă toate simbolurile existente.

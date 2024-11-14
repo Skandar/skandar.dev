@@ -1,0 +1,14 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import * as styles from "./NavLink.css";
+
+interface Props extends HTMLAttributes<"a"> {
+  active?: boolean;
+}
+
+const { href, active = false, ...props } = Astro.props;
+---
+
+<a href={href} class:list={[styles.link, props.class]} {...props}>
+  <slot />
+</a>

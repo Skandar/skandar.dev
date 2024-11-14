@@ -1,0 +1,49 @@
+---
+import { getCollection } from "astro:content";
+
+import { getNLastArticles } from "~/utils/getNLastArticles";
+import { getCollectionFilter } from "~/utils/getCollectionFilter";
+import TagePage from "~/layouts/TagPage/TagPage.astro";
+
+export async function getStaticPaths() {
+  const isDev = import.meta.env.DEV;
+
+  const articleColection = await getCollection("articles", ({ data, slug }) =>
+    getCollectionFilter({
+      lang: "ru",
+      slug,
+      isDev,
+      draft: data.draft,
+    }),
+  );
+
+  // sort by date
+  const lastArticles = getNLastArticles(articleColection, Infinity);
+
+  const tagMap = lastArticles.reduce(
+    (acc, article) => {
+      const tags = article.data.tags || [];
+
+      for (const tag of tags) {
+        if (acc[tag]) {
+          acc[tag].push(article);
+        } else {
+          acc[tag] = [article];
+        }
+      }
+
+      return acc;
+    },
+    {} as Record<string, typeof articleColection>,
+  );
+
+  return Object.entries(tagMap).map(([tag, entries]) => ({
+    params: {
+      tag: tag.split(" ").join("-").toLowerCase(),
+    },
+    props: { entries, tag },
+  }));
+}
+---
+
+<TagePage {...Astro.props} />
