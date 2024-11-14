@@ -17,7 +17,7 @@ describe("useTranslations", () => {
     },
     {
       lang: "uk" as const,
-      langName: "Ukranian",
+      langName: "Ukrainian",
       expected: ["Головна"],
     },
     {

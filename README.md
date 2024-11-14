@@ -1,6 +1,6 @@
-# Aleksandr Slugin's website
+# Aleksandr Slugin's blog
 
-This is the code for [my website](skandar.dev).
+This is the code for my blog.
 
 ## Tech Stack
 
@@ -11,6 +11,6 @@ This is the code for [my website](skandar.dev).
 
 ## Licenses
 
-The source code of this repository is licensed under the MIT License. See the LICENSE file for more information.
+The source code of this repository is licensed under the [MIT License](LICENSE). See the LICENSE file for more information.
 
 The content of this repository (articles, images, videos, etc.) is licensed under the [Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0) License](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en).

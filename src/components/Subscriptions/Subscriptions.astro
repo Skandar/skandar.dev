@@ -4,7 +4,6 @@ import { styles } from "./Subscriptions.css";
 import { useTranslations } from "../../i18n/utils";
 import { DEFAULT_LANG, type Language } from "../../i18n/ui";
 import { removeTrailingSlash } from "~/utils/removeTrailingSlash";
-import { getLocalizedUrl } from "~/utils/getLocalizedPath";
 
 const { currentLocale = DEFAULT_LANG } = Astro;
 
@@ -13,7 +12,7 @@ const t = useTranslations(currentLocale as Language);
 const subscriptions = {
   rss: {
     link: removeTrailingSlash(
-      new URL(getLocalizedUrl(currentLocale, "rss.xml"), Astro.site).toString(),
+      new URL(`rss/${currentLocale}.xml`, Astro.site).toString(),
     ),
     title: t("subscribe.rss"),
   },

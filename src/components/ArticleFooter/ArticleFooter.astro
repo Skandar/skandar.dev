@@ -1,18 +1,23 @@
 ---
-import { getPathWithoutLocale } from "~/utils/getPathWithoutLocale";
 import { useTranslations } from "~/i18n/utils";
 import type { Language } from "~/i18n/ui";
 import NavLink from "../NavLink/NavLink.astro";
 import { styles } from "./ArticleFooter.css";
 import { DEFAULT_LANG } from "~/i18n/ui";
 
-const { url, currentLocale = DEFAULT_LANG } = Astro;
+type Props = {
+  slug: string;
+  collection: string;
+};
+
+const { url, currentLocale = DEFAULT_LANG, ...rest } = Astro;
+const { slug, collection } = Astro.props;
 
 const t = useTranslations(currentLocale as Language);
 
 const repoUrl = "https://github.com/Skandar/skandar.dev";
 
-const pathToArticle = getPathWithoutLocale(url.pathname);
+const pathToArticle = `${collection}/${slug}`;
 ---
 
 <footer class={styles.container}>
