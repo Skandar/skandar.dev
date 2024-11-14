@@ -1,0 +1,181 @@
+---
+import { getAbsoluteLocaleUrl } from "astro:i18n";
+import { type CollectionEntry, getCollection } from "astro:content";
+
+import { removeTrailingSlash } from "~/utils/removeTrailingSlash";
+import { getPathWithoutLocale } from "~/utils/getPathWithoutLocale";
+import { useTranslations } from "~/i18n/utils";
+import { DEFAULT_LANG, languages, locales, type Language } from "~/i18n/ui";
+import "~/styles/global.css";
+import { getLocalizedUrl } from "~/utils/getLocalizedPath";
+
+type Props = Partial<CollectionEntry<"articles">["data"]>;
+
+const { currentLocale = DEFAULT_LANG } = Astro;
+
+const canonicalUrl = removeTrailingSlash(
+  new URL(Astro.url.pathname, Astro.site).toString(),
+);
+
+const titles = await getCollection("articles", ({ slug }) => {
+  return Astro.url.pathname.includes(getPathWithoutLocale(slug));
+});
+
+const hreflangs = languages.reduce(
+  (acc, lang) => {
+    return {
+      ...acc,
+      [lang]: {
+        href: getAbsoluteLocaleUrl(
+          lang,
+          getPathWithoutLocale(Astro.url.pathname),
+        ),
+        title: titles.find((item) => item.slug.startsWith(lang))?.data.title,
+      },
+    };
+  },
+  {} as Record<Language, Record<"href" | "title", string>>,
+);
+
+const t = useTranslations(currentLocale as Language);
+
+const {
+  title: rawTitle,
+  description = t("meta.description"),
+  tags = [],
+  ogImage = `/images/og-image-default/${currentLocale}.jpg`,
+  ogImageAlt = "",
+  ogType = "website",
+  section = "Software Development",
+  publishedTime,
+  modifiedTime,
+} = Astro.props;
+
+const ogImageUrl = new URL(ogImage, Astro.site);
+
+const rssUrl = removeTrailingSlash(
+  new URL(getLocalizedUrl(currentLocale, "rss.xml"), Astro.site).toString(),
+);
+
+const isArticle = ogType === "article";
+
+function formatTitle(title: string | undefined) {
+  return title ? `${title} — ${t("meta.author")}` : t("meta.author");
+}
+
+const title = formatTitle(rawTitle);
+---
+
+<!-- Global Metadata -->
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+
+<!-- Favicon -->
+<link
+  rel="apple-touch-icon"
+  sizes="180x180"
+  href="/images/favicon/apple-touch-icon.png"
+/>
+<link rel="icon" href="/images/favicon/favicon.ico" sizes="any" />
+<link rel="icon" type="image/svg+xml" href="/images/favicon/favicon.svg" />
+<link rel="manifest" href="/images/favicon/manifest.json" />
+
+<meta name="generator" content={Astro.generator} />
+
+<!-- Font preloads -->
+<link
+  rel="preload"
+  href="/fonts/nunito-sans-400.woff2"
+  as="font"
+  type="font/woff2"
+  crossorigin
+/>
+<link
+  rel="preload"
+  href="/fonts/nunito-sans-700.woff2"
+  as="font"
+  type="font/woff2"
+  crossorigin
+/>
+<link
+  rel="preload"
+  href="/fonts/nunito-sans-900.woff2"
+  as="font"
+  type="font/woff2"
+  crossorigin
+/>
+
+<!-- Canonical URL -->
+<link rel="canonical" href={canonicalUrl} />
+
+{
+  Object.entries(hreflangs).map(([lang, data]) => (
+    <link
+      rel="alternate"
+      title={formatTitle(data.title)}
+      href={data.href}
+      hreflang={lang}
+    />
+  ))
+}
+
+<link rel="alternate" type="application/rss+xml" href={rssUrl} />
+
+<!-- Primary Meta Tags -->
+<title>{title}</title>
+<meta name="description" content={description} />
+<meta name="author" content={t("meta.author")} />
+<meta
+  name="keywords"
+  content={["front-end", "web development"].concat(tags).join(", ")}
+/>
+
+<link rel="sitemap" href="/sitemap-index.xml" />
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content={ogType} />
+<meta property="og:url" content={canonicalUrl} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:image" content={ogImageUrl} />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:site_name" content={t("meta.site")} />
+{
+  locales.map((locale) => (
+    <meta
+      property={
+        locale.startsWith(currentLocale) ? "og:locale" : "og:locale:alternate"
+      }
+      content={locale}
+    />
+  ))
+}
+
+{isArticle && section && <meta property="article:section" content={section} />}
+{
+  isArticle && modifiedTime && (
+    <meta
+      property="article:modified_time"
+      content={modifiedTime.toISOString()}
+    />
+  )
+}
+{
+  isArticle && publishedTime && (
+    <meta
+      property="article:published_time"
+      content={publishedTime.toISOString()}
+    />
+  )
+}
+{isArticle && <meta property="article:author" content={t("meta.author")} />}
+{isArticle && tags?.map((tag) => <meta property="article:tag" content={tag} />)}
+
+<!-- Twitter (X) -->
+<meta property="twitter:card" content="summary_large_image" />
+<meta property="twitter:url" content={canonicalUrl} />
+<meta property="twitter:title" content={title} />
+<meta property="twitter:description" content={description} />
+<meta property="twitter:image" content={ogImageUrl} />
+<meta property="twitter:image:alt" content={ogImageAlt} />

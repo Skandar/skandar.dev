@@ -1,0 +1,71 @@
+---
+import type { CollectionEntry } from "astro:content";
+
+import { getLocalizedUrl } from "~/utils/getLocalizedPath";
+import { styles } from "./ArticleHeader.css";
+import { useTranslations } from "~/i18n/utils";
+import { DEFAULT_LANG, type Language } from "~/i18n/ui";
+
+type Props = Pick<
+  CollectionEntry<"articles">["data"],
+  "title" | "publishedTime" | "modifiedTime" | "tags"
+>;
+
+const { currentLocale = DEFAULT_LANG } = Astro;
+const { title, publishedTime, modifiedTime, tags } = Astro.props;
+
+const t = useTranslations(currentLocale as Language);
+---
+
+<header class={styles.header}>
+  <h1 class={styles.title}>{title}</h1>
+  <div class={styles.info}>
+    <div class={styles.group}>
+      <div class={styles.groupTitle}>{t("article.publishedTime")}</div>
+      <div>
+        {
+          publishedTime.toLocaleDateString(currentLocale, {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          })
+        }
+      </div>
+    </div>
+    {
+      modifiedTime && (
+        <div class={styles.group}>
+          <div class={styles.groupTitle}>{t("article.modifiedTime")}</div>
+          <div>
+            {modifiedTime.toLocaleDateString(currentLocale, {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            })}
+          </div>
+        </div>
+      )
+    }
+    {
+      tags.length > 0 && (
+        <div class={styles.group}>
+          <div class={styles.groupTitle}>{t("article.tags")}</div>
+          <div class={styles.tags}>
+            {tags.map((tag) => (
+              <a
+                class={styles.tag}
+                href={getLocalizedUrl(
+                  currentLocale,
+                  `/tags/${tag.toLowerCase()}`,
+                )}
+                data-astro-prefetch
+              >
+                {tag}
+              </a>
+            ))}
+          </div>
+        </div>
+      )
+    }
+  </div>
+</header>

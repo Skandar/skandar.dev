@@ -1,0 +1,32 @@
+---
+import { getLocalizedUrl } from "~/utils/getLocalizedPath";
+import { DEFAULT_LANG } from "../../i18n/ui";
+import { styles } from "./TagList.css";
+
+interface Props {
+  entries: Array<{
+    title: string;
+    tag: string;
+    total: number;
+  }>;
+}
+
+const { currentLocale = DEFAULT_LANG } = Astro;
+const { entries } = Astro.props;
+---
+
+<ul class={styles.list}>
+  {
+    entries.map((entry) => (
+      <li class={styles.item}>
+        <a
+          href={getLocalizedUrl(currentLocale, `/tags/${entry.tag}`)}
+          class={styles.link}
+          data-astro-prefetch
+        >
+          {entry.title} ({entry.total})
+        </a>
+      </li>
+    ))
+  }
+</ul>

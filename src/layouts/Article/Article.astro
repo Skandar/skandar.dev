@@ -1,0 +1,31 @@
+---
+import type { CollectionEntry } from "astro:content";
+
+import ArticleHeader from "~/components/ArticleHeader/ArticleHeader.astro";
+import BaseLayout from "~/layouts/Base/Base.astro";
+import Container from "~/components/Container/Container.astro";
+import MoreLinks from "~/components/MoreLinks/MoreLinks.astro";
+import ShareArticle from "~/components/ShareArticle/ShareArticle.astro";
+import { styles } from "./Article.css";
+import ArticleFooter from "~/components/ArticleFooter/ArticleFooter.astro";
+
+type Props = CollectionEntry<"articles">["data"];
+
+const { title, publishedTime, modifiedTime, tags } = Astro.props;
+---
+
+<BaseLayout {...Astro.props}>
+  <Container>
+    <ArticleHeader
+      title={title}
+      publishedTime={publishedTime}
+      modifiedTime={modifiedTime}
+      tags={tags}
+    />
+    <div class={styles.body}>
+      <slot />
+    </div>
+    <ArticleFooter />
+  </Container>
+  <ShareArticle title={title} />
+</BaseLayout>

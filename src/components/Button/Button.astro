@@ -1,0 +1,48 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+import { styles } from "./Button.css";
+
+type Props = {
+  href?: string;
+  size?: "small" | "medium";
+  appearance?: "filled" | "outline" | "ghost";
+} & HTMLAttributes<"button">;
+
+const {
+  href,
+  size = "medium",
+  appearance = "filled",
+  class: classNames,
+  ...props
+} = Astro.props;
+---
+
+{
+  href ? (
+    <a
+      href={href}
+      class:list={[
+        styles.button,
+        styles.variants[appearance],
+        styles.sizes[size],
+        classNames,
+      ]}
+      {...props}
+    >
+      <slot />
+    </a>
+  ) : (
+    <button
+      class:list={[
+        styles.button,
+        styles.variants[appearance],
+        styles.sizes[size],
+        classNames,
+      ]}
+      {...props}
+    >
+      <slot />
+    </button>
+  )
+}

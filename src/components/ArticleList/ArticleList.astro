@@ -1,0 +1,34 @@
+---
+import type { InferGetStaticPropsType } from "astro";
+import { getLocalizedUrl } from "~/utils/getLocalizedPath";
+import { getPathWithoutLocale } from "~/utils/getPathWithoutLocale";
+import type { getStaticPaths } from "~/pages/articles/[slug].astro";
+import { DEFAULT_LANG } from "~/i18n/ui";
+import ArticleEntry from "../ArticleEntry/ArticleEntry.astro";
+import { styles } from "./ArticleList.css";
+
+interface Props {
+  entries: Array<InferGetStaticPropsType<typeof getStaticPaths>>;
+}
+
+const { currentLocale = DEFAULT_LANG } = Astro;
+const { entries } = Astro.props;
+---
+
+<div class={styles.list}>
+  {
+    entries.map((entry) => (
+      <div class={styles.item}>
+        <ArticleEntry
+          title={entry.data.title}
+          titleLevel={3}
+          href={getLocalizedUrl(
+            currentLocale,
+            `/${entry.collection}/${getPathWithoutLocale(entry.slug)}`,
+          )}
+          descirption={entry.data.description}
+        />
+      </div>
+    ))
+  }
+</div>

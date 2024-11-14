@@ -1,0 +1,52 @@
+---
+import NavLink from "../NavLink/NavLink.astro";
+import { styles } from "./Subscriptions.css";
+import { useTranslations } from "../../i18n/utils";
+import { DEFAULT_LANG, type Language } from "../../i18n/ui";
+import { removeTrailingSlash } from "~/utils/removeTrailingSlash";
+import { getLocalizedUrl } from "~/utils/getLocalizedPath";
+
+const { currentLocale = DEFAULT_LANG } = Astro;
+
+const t = useTranslations(currentLocale as Language);
+
+const subscriptions = {
+  rss: {
+    link: removeTrailingSlash(
+      new URL(getLocalizedUrl(currentLocale, "rss.xml"), Astro.site).toString(),
+    ),
+    title: t("subscribe.rss"),
+  },
+  github: {
+    link: "https://github.com/Skandar",
+    title: t("subscribe.github"),
+  },
+  telegram: {
+    link: t("subscribe.telegram.url"),
+    title: t("subscribe.telegram.title"),
+  },
+  bluesky: {
+    link: "https://bsky.app/profile/skandar-dev.bsky.social",
+    title: t("subscribe.bluesky"),
+  },
+  linkedin: {
+    link: "https://www.linkedin.com/in/aleksandr-slugin/",
+    title: t("subscribe.linkedin"),
+  },
+};
+---
+
+<section>
+  <h2 class={styles.title} id="find-me-online">{t("subscribe.title")}</h2>
+  <ul class={styles.list}>
+    {
+      Object.values(subscriptions).map(({ link, title }) => (
+        <li>
+          <NavLink href={link} rel="noopeneer noreferrer" target="_blank">
+            {title}
+          </NavLink>
+        </li>
+      ))
+    }
+  </ul>
+</section>

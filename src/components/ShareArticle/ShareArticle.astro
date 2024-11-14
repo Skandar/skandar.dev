@@ -1,0 +1,70 @@
+---
+import Container from "../Container/Container.astro";
+import type { Language } from "../../i18n/ui";
+import { useTranslations } from "../../i18n/utils";
+import NavLink from "../NavLink/NavLink.astro";
+import { styles } from "./ShareArticle.css";
+
+const { url } = Astro;
+const { title } = Astro.props;
+
+const { currentLocale = "en" } = Astro;
+
+const t = useTranslations(currentLocale as Language);
+
+const encodedUrl = encodeURIComponent(url.href);
+const encodedTitle = encodeURIComponent(title);
+---
+
+<Container>
+  <section class={styles.section} id="share-article">
+    <h3 class={styles.title}>{t("share.title")}</h3>
+    <ul class={styles.list}>
+      <li>
+        <NavLink
+          href={`https://twitter.com/intent/tweet?text=${encodedTitle}&url=${encodedUrl}`}
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          X (Twitter)
+        </NavLink>
+      </li>
+      <li>
+        <NavLink
+          href={`https://bsky.app/intent/compose?text=${encodedTitle} ${encodedUrl}`}
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          Bluesky
+        </NavLink>
+      </li>
+      <li>
+        <NavLink
+          href={`https://www.facebook.com/sharer.php?u=${encodedUrl}`}
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          Facebook
+        </NavLink>
+      </li>
+      <li>
+        <NavLink
+          href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`}
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          LinkedIn
+        </NavLink>
+      </li>
+      <li>
+        <NavLink
+          href={`https://t.me/share/url?url=${encodedUrl}&text=${encodedTitle}`}
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          Telegram
+        </NavLink>
+      </li>
+    </ul>
+  </section>
+</Container>

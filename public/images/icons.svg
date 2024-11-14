@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg">
+<symbol id="info" width="33" height="32" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M18.138 9.086h-3.52v3.52h3.52v-3.52ZM14.618 22.914v-8.748h3.52v8.748h-3.52Z" fill="currentColor"/><path fill-rule="evenodd" clip-rule="evenodd" d="M1.878 4v24l2.5 2.5h24l2.5-2.5V4l-2.5-2.5h-24L1.878 4Zm25 .5h-21l-1 1v21l1 1h21l1-1v-21l-1-1Z" fill="currentColor"/></symbol>
+
+<symbol id="warning" width="32" height="32" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M30.775 30.07H1.225L0 27.965 14.775 1.93h2.45L32 27.965l-1.225 2.105ZM3.64 27.255h24.72L16 5.5 3.64 27.255Zm10.6-15.36v8.745h3.5v-8.745h-3.5Z" fill="currentColor"/><path d="M17.76 22.21h-3.52v3.52h3.52v-3.52Z" fill="currentColor"/></symbol>
+
+
+<symbol id="burger" width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect width="8" height="8" fill="currentColor"/>
+<rect y="12" width="8" height="8" fill="currentColor"/>
+<rect x="12" y="12" width="8" height="8" fill="currentColor"/>
+<rect x="12" width="8" height="8" fill="currentColor"/>
+<rect x="24" width="8" height="8" fill="currentColor"/>
+<rect x="24" y="12" width="8" height="8" fill="currentColor"/>
+<rect x="24" y="24" width="8" height="8" fill="currentColor"/>
+<rect x="12" y="24" width="8" height="8" fill="currentColor"/>
+<rect y="24" width="8" height="8" fill="currentColor"/>
+</symbol>
+
+</svg>

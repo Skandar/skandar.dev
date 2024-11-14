@@ -1,0 +1,38 @@
+---
+import { getCollection } from "astro:content";
+
+import Container from "~/components/Container/Container.astro";
+import { DEFAULT_LANG, type Language } from "~/i18n/ui";
+import { useTranslations } from "~/i18n/utils";
+import Articles from "~/components/ArticleList/ArticleList.astro";
+import PageLayout from "~/layouts/Page/Page.astro";
+import { getCollectionFilter } from "~/utils/getCollectionFilter";
+import { getNLastArticles } from "~/utils/getNLastArticles";
+import { styles } from "./ArticleList.css";
+
+const isDev = import.meta.env.DEV;
+
+const { currentLocale = DEFAULT_LANG } = Astro;
+
+const entries = await getCollection("articles", ({ data, slug }) =>
+  getCollectionFilter({
+    lang: currentLocale,
+    slug,
+    isDev,
+    draft: data.draft,
+  }),
+);
+
+const sortedEntries = getNLastArticles(entries, Infinity);
+
+const t = useTranslations(currentLocale as Language);
+---
+
+<PageLayout {...Astro.props}>
+  <section class={styles.section}>
+    <Container>
+      <h1 class={styles.title} id="articles">{t("articles.title")}</h1>
+      <Articles entries={sortedEntries} />
+    </Container>
+  </section>
+</PageLayout>

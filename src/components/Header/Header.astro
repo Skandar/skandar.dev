@@ -1,0 +1,41 @@
+---
+import NavLink from "../NavLink/NavLink.astro";
+import * as styles from "./Header.css";
+import Container from "../Container/Container.astro";
+import { getLocalizedUrl } from "~/utils/getLocalizedPath";
+import type { Language } from "../../i18n/ui";
+import { useTranslations } from "../../i18n/utils";
+
+const { currentLocale = "en", url } = Astro;
+
+const t = useTranslations(currentLocale as Language);
+
+const links = [{ href: "/articles", text: t("nav.articles") }];
+---
+
+<header class={styles.header}>
+  <Container>
+    <nav class={styles.nav}>
+      <NavLink href={getLocalizedUrl(currentLocale, "/")}>
+        {t("nav.home")}
+      </NavLink>
+      <div>
+        <ul class={styles.linkList}>
+          {
+            links.map((item) => (
+              <li>
+                <NavLink
+                  href={getLocalizedUrl(currentLocale, item.href)}
+                  active={url.pathname === item.href}
+                  data-astro-prefetch
+                >
+                  {item.text}
+                </NavLink>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </nav>
+  </Container>
+</header>

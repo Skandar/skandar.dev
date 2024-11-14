@@ -1,0 +1,33 @@
+---
+import { type CollectionEntry, getCollection } from "astro:content";
+
+import ArticleLayout from "~/layouts/Article/Article.astro";
+import { getPathWithoutLocale } from "~/utils/getPathWithoutLocale";
+import { getCollectionFilter } from "~/utils/getCollectionFilter";
+
+export async function getStaticPaths() {
+  const isDev = import.meta.env.DEV || false;
+
+  const articles = await getCollection("articles", ({ data, slug }) =>
+    getCollectionFilter({ lang: "uk", slug, isDev, draft: data.draft }),
+  );
+
+  return articles.map((entry) => ({
+    params: {
+      category: entry.collection,
+      slug: getPathWithoutLocale(entry.slug),
+    },
+    props: entry,
+  }));
+}
+
+type Props = CollectionEntry<"articles">;
+
+const { data, render } = Astro.props;
+
+const { Content } = await render();
+---
+
+<ArticleLayout {...data}>
+  <Content />
+</ArticleLayout>

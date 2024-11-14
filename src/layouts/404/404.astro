@@ -1,0 +1,22 @@
+---
+import Container from "~/components/Container/Container.astro";
+
+import { DEFAULT_LANG, type Language } from "~/i18n/ui";
+import { useTranslations } from "~/i18n/utils";
+import BaseLayout from "../Base/Base.astro";
+import { styles } from "./404.css";
+
+const { currentLocale = DEFAULT_LANG } = Astro;
+const t = useTranslations(currentLocale as Language);
+---
+
+<BaseLayout title={t("404.title")} description={t("404.description")}>
+  <section>
+    <Container>
+      <h1 class={styles.title}>
+        <span>404</span>
+        <span>{t("404.page-not-found")}</span>
+      </h1>
+    </Container>
+  </section>
+</BaseLayout>

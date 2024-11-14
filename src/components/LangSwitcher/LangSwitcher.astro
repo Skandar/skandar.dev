@@ -1,0 +1,30 @@
+---
+import { getLocalizedUrl } from "~/utils/getLocalizedPath";
+import { useTranslations } from "~/i18n/utils";
+import { DEFAULT_LANG, languagesWithLabels, type Language } from "~/i18n/ui";
+import Button from "../Button/Button.astro";
+import { styles } from "./LangSwitcher.css";
+import { getPathWithoutLocale } from "~/utils/getPathWithoutLocale";
+
+const { currentLocale = DEFAULT_LANG, url } = Astro;
+const t = useTranslations(currentLocale as Language);
+---
+
+<section>
+  <h2 class={styles.title} id="languages">{t("footer.language")}</h2>
+  <div class={styles.list}>
+    {
+      Object.entries(languagesWithLabels).map(([key, value]) => (
+        <Button
+          href={getLocalizedUrl(key, getPathWithoutLocale(url.pathname))}
+          size="small"
+          appearance={key === currentLocale ? "filled" : "outline"}
+          class={styles.button}
+          data-astro-prefetch
+        >
+          {value}
+        </Button>
+      ))
+    }
+  </div>
+</section>
