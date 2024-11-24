@@ -19,6 +19,7 @@
     "@vanilla-extract/css": "^1.16.0",
     "@vanilla-extract/css-utils": "^0.1.4",
     "astro": "^4.16.7",
+    "cssesc": "file:./overrides/cssesc",
     "typescript": "^5.6.3"
   },
   "devDependencies": {
@@ -28,5 +29,10 @@
     "prettier": "^3.3.3",
     "prettier-plugin-astro": "^0.14.1",
     "vitest": "^2.1.4"
+  },
+  "overrides": {
+    "@vanilla-extract/css": {
+      "cssesc": "$cssesc"
+    }
   }
 }
