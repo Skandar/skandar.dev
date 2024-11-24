@@ -1,6 +1,5 @@
 ---
-import { tokens } from "~/styles/themes.css";
-import { breakpoints } from "~/styles/tokens";
+import { styles } from "./Callout.css";
 
 interface Props {
   variant: "info" | "warning";
@@ -9,71 +8,11 @@ interface Props {
 const { variant } = Astro.props;
 ---
 
-<aside class:list={["callout", variant]}>
-  <div class="badge">
+<aside class:list={[styles.callout, styles.variant[variant]]}>
+  <div class={styles.badge}>
     <svg>
       <use href={`/images/icons.svg#${variant}`}></use>
     </svg>
   </div>
   <slot />
 </aside>
-
-<!--
-TODO: vanilla-extract don't emit styles for the component which used in MDX
-Possible ussie resolved after this ticket https://github.com/vanilla-extract-css/vanilla-extract/issues/1453
- -->
-<style
-  define:vars={{
-    calloutBackgroundColor: tokens.theme.colors.foreground,
-    calloutBlockPadding: tokens.spaces[24],
-    calloutInlinePadding: tokens.spaces[16],
-    calloutInlinePaddingMD: tokens.spaces[32],
-    calloutGap: tokens.spaces[12],
-
-    borderSize: tokens.sizes[4],
-    borderColor: tokens.theme.colors.accent,
-
-    badgeBackgroundColor: tokens.theme.colors.background,
-    iconSize: tokens.sizes[32],
-
-    codeBackgroundColor: tokens.theme.colors.main,
-    codeColor: tokens.theme.colors.accent,
-
-    breakpoints: breakpoints.md,
-  }}
->
-  .callout {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    gap: var(--calloutGap);
-    padding-block: var(--calloutBlockPadding);
-    padding-inline: var(--calloutInlinePadding);
-    margin-block: var(--calloutBlockPadding);
-    background-color: var(--calloutBackgroundColor);
-    border-inline-start: var(--borderSize) solid var(--borderColor);
-  }
-
-  /* TODO: fix hardcoded breakpoint */
-  @media screen and (min-width: 48rem) {
-    .callout {
-      padding-inline: var(--calloutInlinePaddingMD);
-    }
-  }
-
-  .badge {
-    position: absolute;
-    inset-inline-start: calc((var(--borderSize) / 2) * -1);
-    inset-block-start: calc((var(--borderSize) / 2));
-    transform: translate(-50%, -50%);
-    width: var(--iconSize);
-    height: var(--iconSize);
-    box-shadow: 0 0 0 var(--borderSize) var(--badgeBackgroundColor);
-    background-color: var(--badgeBackgroundColor);
-  }
-
-  svg {
-    width: 100%;
-    height: 100%;
-  }
-</style>
