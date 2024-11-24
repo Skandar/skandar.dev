@@ -10,7 +10,7 @@ type Props = {
   collection: string;
 };
 
-const { url, currentLocale = DEFAULT_LANG, ...rest } = Astro;
+const { currentLocale = DEFAULT_LANG } = Astro;
 const { slug, collection } = Astro.props;
 
 const t = useTranslations(currentLocale as Language);
