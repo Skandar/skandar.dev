@@ -1,11 +1,24 @@
 import { style, styleVariants } from "@vanilla-extract/css";
+import { calc } from "@vanilla-extract/css-utils";
 import { tokens } from "~/styles/themes.css";
+import { breakpoints } from "~/styles/tokens";
 
 const callout = style({
+  position: "relative",
+  display: "flex",
+  flexDirection: "column",
+  gap: tokens.spaces[12],
+  paddingBlock: tokens.spaces[24],
+  paddingInline: tokens.spaces[16],
+  marginBlock: tokens.spaces[24],
   backgroundColor: tokens.theme.colors.foreground,
-  paddingInline: tokens.spaces[4],
-  paddingBlock: tokens.spaces[8],
-  border: `5px solid ${tokens.theme.colors.accent}`,
+  borderInlineStart: `${tokens.sizes[4]} solid ${tokens.theme.colors.accent}`,
+
+  "@media": {
+    [`all and (min-width: ${breakpoints.md})`]: {
+      paddingBlock: tokens.sizes[48],
+    },
+  },
 });
 
 const variant = styleVariants({
@@ -18,7 +31,14 @@ const variant = styleVariants({
 });
 
 const badge = style({
-  backgroundColor: "red",
+  position: "absolute",
+  insetInlineStart: calc.negate(tokens.sizes[2]),
+  insetBlockStart: tokens.sizes[2],
+  transform: "translate(-50%, -50%)",
+  width: tokens.sizes[32],
+  height: tokens.sizes[32],
+  boxShadow: `0 0 0 ${tokens.sizes[4]} ${tokens.theme.colors.background}`,
+  backgroundColor: tokens.theme.colors.background,
 });
 
 export const styles = { callout, variant, badge };
