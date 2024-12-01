@@ -1,7 +1,7 @@
 import { style } from "@vanilla-extract/css";
 
 const container = style({
-  width: "min(80ch, 92vw)",
+  width: "min(68ch, 92vw)",
   marginInline: "auto",
 });
 

@@ -10,8 +10,7 @@ const body = style({
 
   "@media": {
     [`all and (min-width: ${breakpoints.sm})`]: {
-      gridTemplateColumns:
-        "[full-start] 7ch [content-start] 1fr [content-end] 7ch [full-end]",
+      gridTemplateColumns: `[full-start] ${tokens.spaces[36]} [content-start] 1fr [content-end]  ${tokens.spaces[36]}  [full-end]`,
     },
   },
 });
@@ -23,7 +22,7 @@ globalStyle(
   },
 );
 
-globalStyle(`${body} :where(img, :has(img))`, {
+globalStyle(`${body} :where(pre, img, :has(img))`, {
   gridColumn: "full",
 });
 
@@ -44,15 +43,16 @@ globalStyle(`${body} > h4`, {
 });
 
 globalStyle(`${body} pre`, {
-  padding: tokens.spaces[20],
-});
-
-globalStyle(`${body} img`, {
-  display: "block",
+  paddingBlock: tokens.spaces[12],
+  paddingInline: tokens.spaces[16],
   width: "100%",
-  maxWidth: "fit-content",
-  height: "auto",
-  marginInline: "auto",
+
+  "@media": {
+    [`all and (min-width: ${breakpoints.sm})`]: {
+      paddingBlock: tokens.spaces[24],
+      paddingInline: tokens.spaces[36],
+    },
+  },
 });
 
 globalStyle(`${body} blockquote`, {
@@ -66,6 +66,7 @@ globalStyle(`${body} :where(code:not(pre > code), kbd)`, {
   paddingBlock: tokens.spaces[2],
   paddingInline: tokens.spaces[4],
   fontWeight: tokens.typography.text.md.fontWeight.bold,
+  border: `${tokens.borders.widths[1]} solid ${tokens.theme.colors.accent}`,
   backgroundColor: tokens.theme.colors.foreground,
   boxDecorationBreak: "clone",
   // for Safari
