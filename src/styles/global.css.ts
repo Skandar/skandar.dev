@@ -35,6 +35,11 @@ globalStyle(":root", {
   },
 });
 
+globalStyle(":root[data-theme=dark] :where(.astro-code, .astro-code span)", {
+  color: "var(--shiki-dark) !important",
+  backgroundColor: "var(--shiki-dark-bg) !important",
+});
+
 globalStyle("*, *::before, *::after", {
   boxSizing: "border-box",
   margin: 0,
@@ -119,7 +124,6 @@ globalStyle("h1", {
 });
 
 globalStyle("h2", {
-  // fontSize: tokens.typography.display.xl.fontSize,
   fontSize: `clamp(
     ${tokens.typography.display.lg.fontSize},
     5vw,
@@ -129,7 +133,6 @@ globalStyle("h2", {
 });
 
 globalStyle("h3", {
-  // fontSize: tokens.typography.display.lg.fontSize,
   fontSize: `clamp(
     ${tokens.typography.display.md.fontSize},
     4vw,
@@ -139,11 +142,24 @@ globalStyle("h3", {
 });
 
 globalStyle("h4", {
-  // fontSize: tokens.typography.display.md.fontSize,
   fontSize: `clamp(
     ${tokens.typography.display.sm.fontSize},
     3vw,
     ${tokens.typography.display.md.fontSize}
   )`,
   fontWeight: tokens.typography.display.md.fontWeight.bold,
+});
+
+globalStyle("img", {
+  display: "block",
+  width: "100%",
+  maxWidth: "fit-content",
+  height: "auto",
+  marginInline: "auto",
+});
+
+globalStyle("svg", {
+  display: "block",
+  width: "100%",
+  height: "100%",
 });

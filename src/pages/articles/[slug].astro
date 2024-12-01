@@ -4,7 +4,7 @@ import { type CollectionEntry, getCollection } from "astro:content";
 import ArticleLayout from "~/layouts/Article/Article.astro";
 import { getPathWithoutLocale } from "~/utils/getPathWithoutLocale";
 import { getCollectionFilter } from "~/utils/getCollectionFilter";
-import { components } from "~/components/ArticleComponents";
+import { customComponents } from "~/components/ArticleComponents";
 
 export async function getStaticPaths() {
   const isDev = import.meta.env.DEV || false;
@@ -35,5 +35,5 @@ const { Content } = await render();
 ---
 
 <ArticleLayout slug={slug} collection={collection} {...data}>
-  <Content components={components} />
+  <Content components={customComponents} />
 </ArticleLayout>
