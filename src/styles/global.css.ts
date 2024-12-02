@@ -39,6 +39,14 @@ globalStyle(":root[data-theme=dark] :where(.astro-code, .astro-code span)", {
   color: "var(--shiki-dark) !important",
   backgroundColor: "var(--shiki-dark-bg) !important",
 });
+globalStyle(":root[data-theme=system] :where(.astro-code, .astro-code span)", {
+  "@media": {
+    "(prefers-color-scheme: dark)": {
+      color: "var(--shiki-dark) !important",
+      backgroundColor: "var(--shiki-dark-bg) !important",
+    },
+  },
+});
 
 globalStyle("*, *::before, *::after", {
   boxSizing: "border-box",

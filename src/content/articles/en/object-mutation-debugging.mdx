@@ -1,0 +1,224 @@
+---
+title: "Debugging object mutation"
+description: "There is a common belief that mutating objects is bad practice. One of the reasons for this opinion is the unpredictable behavior that leads to bugs that are difficult to detect. In this article, we will explore approaches to simplify finding mutations."
+publishedTime: "Dec 03 2024"
+modifiedTime: "Dec 03 2024"
+tags: ["JavaScript", "Mutation", "Debugging"]
+ogImage: "/images/object-mutation-debugging/en.jpg"
+---
+
+import ChromeScreenshot from "~/images/object-mutation-debugging/devtools-debugging.png";
+import { breakpoints } from "~/styles/tokens";
+
+There is a common belief that mutating objects is bad practice. One reason for this opinion is the unpredictable behavior it can lead to, resulting in bugs that are hard to detect. Let's explore how we can simplify the process of finding mutations, but first, we need to understand what "mutation" actually is and what are the pros and cons of mutating an object.
+
+## What is mutation?
+
+Mutation generally refers to changing the properties of an object without changing the reference to the object itself. The following changes are considered mutations:
+
+- Adding new properties.
+- Deleting existing properties.
+- Changing property values.
+- Changing property <Link external href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty">descriptors</Link>.
+
+For example, in the code below, we mutate the `person` object by adding a new property `age`, deleting the `address` property, and changing the descriptors of the `id` property.
+
+```js
+const person = {
+  id: "12345",
+  name: "Alex",
+  address: "bld. Dacia 1, Chisinau, Moldova",
+};
+
+person.age = 111;
+delete person.address;
+Object.defineProperty(person, "id", {
+  writable: false,
+  configurable: false,
+});
+```
+
+Mutating an object has both advantages and disadvantages. Let's consider them:
+
+Pros:
+
+- Code that uses mutation can be more performant when dealing with a large number of operations and on low-powered devices, as it doesn't need to create additional objects and copy data into them.
+
+Cons:
+
+- The code becomes more unpredictable. We mutate an object in one place, which can lead to unexpected consequences elsewhere.
+- In code where objects are coming from parameters are mutated, bugs are hard to detect and debug.
+- Race conditions may occur where the object is mutated simultaneously, leading to unpredictable results.
+
+## How to recognize a mutation?
+
+Sometimes it's hard to notice that an object is being mutated. Usually, during development, we realize that something is "off" with the object, and then we start debugging. Here are some signs that indicate the object might need to be checked for mutations:
+
+- The order of elements is not as expected (relevant for arrays).
+- The object has properties that shouldn't be there or is missing properties that should be there. For example, we know that we should have an empty array but find that it contains elements.
+- `console.log()` in the browser behaves strangely, showing one set of properties in the preview and different ones when expanding the object.
+
+## Debugging
+
+Assuming we've realized that the object is being mutated and it's time to find out where it's happening. At this stage, we can use several approaches for debugging. We often combine them. Let's look at each one.
+
+### "Skimming through" to find mutation points
+
+We can start by quickly skimming through the code to look for known causes of mutation:
+
+- Explicit addition, modification, or deletion of properties.
+- Using of methods that mutate the object. For example, for arrays, these would be `sort()`, `reverse()`, `splice()`, `push()`, `pop()`, `shift()`, `unshift()`.
+
+If this object is passed deeply through the code, it might be challenging to find the mutation this way.
+
+### Logging the object
+
+As we skim through the code, we can log the object before and after the place where the problem might be occurring. In the `console.log()` before the code, we need to output a deep copy of the object, and after the code, the original object. After the second `console.log()`, we should interrupt the execution so that the code that follows doesn't affect the object.
+
+```js
+const person = {};
+
+console.log(structuredClone(person));
+suspiciousFunction(person);
+console.log(person);
+
+// Interrupt code execution so that
+// the code below doesn't mutate the object
+debugger;
+```
+
+If objects don't differ visually, then the mutation is likely happening further along.
+
+<Callout variant="info">
+**Special features of `console.log()` in browsers**
+
+When logging an object using `console.log()`, a preview of the object's content is initially displayed. Clicking on the preview expands the object, showing properties at the top level and previews of properties at deeper levels.
+
+For the preview, values are displayed lazily at the first display and do not change afterward.
+
+For the expanded state, values are fetched when the object is expanded. Browsers implement this differently:
+
+- Chrome and Firefox: Once properties are displayed, they do not update. The logic is the same as for the preview.
+- Safari: The object's property values update each time the object is expanded.
+
+</Callout>
+
+### Debugging with browser DevTools
+
+We add a `debugger` statement or a breakpoint, go to the browser's DevTools, and start debugging. To see the object's properties in real-time during debugging, we can add the object to a global variable and then add this variable to the Watch.
+
+<figure>
+  <Picture
+    src={ChromeScreenshot}
+    widths={[480, 720, 960, 1015, 1440, 2030]}
+    sizes={`(min-width: ${breakpoints.xs}) 100vw, 480px`}
+    formats={["avif", "webp"]}
+    quality={70}
+    alt="Chrome DevTools showing the variable person added to window, and window.person added to the Watch."
+    pictureAttributes={{
+      style: {
+        aspectRatio: `${ChromeScreenshot.width} / ${ChromeScreenshot.height}`,
+      },
+    }}
+  />
+  <figcaption>Chrome DevTools in debugging mode</figcaption>
+</figure>
+
+### Debugging with Proxy
+
+Proxy allows us to add "traps" that are called during various operations on objects (when internal methods are invoked). This is precisely what we need to find where the mutation occurs. We are interested in the following traps:
+
+- <Link external href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy/Proxy/set">set()</Link> - called when setting a property's value.
+- <Link external href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy/Proxy/deleteProperty">deleteProperty()</Link>- called when deleting a property.
+- <Link external href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy/Proxy/defineProperty">defineProperty()</Link> - called when defining a new property.
+
+We create a Proxy with these traps and add a debugger statement in each, so that when debugging in DevTools, after exiting the `Proxy` code, we'll see where the mutation occurs. Here's an example of how this can be implemented:
+
+```js
+const defaultHandler = {
+  set(target, property, value, receiver) {
+    debugger;
+    console.log(
+      `Property "${property}" changed from ${target[property]} to ${value}`,
+    );
+    return Reflect.set(target, property, value, receiver);
+  },
+  deleteProperty(target, property) {
+    debugger;
+    console.log(`Property "${property}" deleted`);
+    return Reflect.deleteProperty(target, property);
+  },
+  defineProperty(target, property, descriptor) {
+    debugger;
+    console.log(`Property "${property}" defined`);
+    return Reflect.defineProperty(target, property, descriptor);
+  },
+};
+
+function createDeepProxy(
+  target,
+  handler = defaultHandler,
+  proxyMap = new WeakMap(),
+) {
+  if (target !== null && typeof target === "object") {
+    // Return proxy if it's already created
+    // (to avoid infinite recursion)
+    if (proxyMap.has(target)) {
+      return proxyMap.get(target);
+    }
+
+    const proxy = new Proxy(target, handler);
+    proxyMap.set(target, proxy);
+
+    // Recursively create proxies for nested objects
+    for (const key of Reflect.ownKeys(target)) {
+      const value = target[key];
+      if (value !== null && typeof value === "object") {
+        target[key] = createDeepProxy(value, handler, proxyMap);
+      }
+    }
+
+    return proxy;
+  }
+
+  // Return target if it's not an object
+  return target;
+}
+
+const person = {
+  id: "12345",
+  name: "Alex",
+  address: "bld. Dacia 1, Chisinau, Moldova",
+};
+
+// Create a proxy and use it
+// instead of the original object
+const proxy = createDeepProxy(person);
+```
+
+### Using AI
+
+We can feed the code to an AI and prompt it to find all the places where mutations occur. If we know that the error occurs in only one file, we can use the web interface of ChatGPT or similar services. If there are many such files, it becomes inconvenient.
+
+In GitHub Copilot Chat in VSCode, there's an option to instruct it to execute the prompt across all workspace files. To do this, you start the prompt with the `@workspace` extension.
+
+<Callout variant="warning">
+Before using AI to analyze work code, make sure that your company allows it.
+</Callout>
+
+## How to avoid mutations
+
+Here are some thoughts on how to avoid mutations:
+
+- Use an ESLint rule that will flag parameter reassignment in functions as an error (<Link external href="https://eslint.org/docs/latest/rules/no-param-reassign">no-param-reassign</Link>).
+- Use TypeScript for strict typing and to identify potential mutations at compile time.
+- Establish a team convention on when mutation is acceptable and when it's not. For example, never mutate objects that come in as function parameters or props for React components.
+- Instead of mutating methods, use non-mutating alternatives:
+
+  - `sort()` → `toSorted()`
+  - `reverse()` → `toReversed()`
+  - `splice()` → `toSpliced()`
+
+  Before using, check if browser support suits your needs.
+
+- Use immutable data structures from libraries or create your own using `Object.freeze()`, the property descriptor `writable: false` (can be set using `Object.defineProperty()`), or a `set` descriptor that doesn't assign a new value to the property.

@@ -1,0 +1,228 @@
+---
+title: "Depanarea mutațiilor obiectelor"
+description: "Există o opinie larg răspândită că mutarea obiectelor este o practică proastă. Unul dintre motivele acestei opinii este comportamentul imprevizibil care duce la bug-uri greu de detectat. În acest articol, vom analiza abordări pentru a simplifica găsirea mutațiilor."
+publishedTime: "Dec 03 2024"
+modifiedTime: "Dec 03 2024"
+tags: ["JavaScript", "Mutation", "Debugging"]
+ogImage: "/images/object-mutation-debugging/ru.jpg"
+---
+
+import ChromeScreenshot from "~/images/object-mutation-debugging/devtools-debugging.png";
+import { breakpoints } from "~/styles/tokens";
+
+Există o opinie larg răspândită că mutarea obiectelor este o practică proastă. Unul dintre motivele acestei opinii este comportamentul imprevizibil care duce la bug-uri greu de detectat. Să vedem cum putem simplifica găsirea mutațiilor, dar mai întâi trebuie să înțelegem ce este mutația și care sunt avantajele și dezavantajele mutării unui obiect.
+
+## Ce este o mutație?
+
+Prin mutație se înțelege, de obicei, modificarea proprietăților unui obiect fără a schimba referința la obiectul în sine. Ce modificări sunt considerate mutații:
+
+- adăugarea de noi proprietăți;
+- ștergerea proprietăților existente;
+- modificarea valorilor proprietăților;
+- modificarea valorilor <Link external href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty">descriptorilor</Link> proprietăților.
+
+De exemplu, în codul de mai jos mutăm obiectul `person`, adăugăm o nouă proprietate `age`, ștergem proprietatea `address` și modificăm descriptorii proprietății `id`.
+
+```js
+const person = {
+  id: "12345",
+  name: "Alex",
+  address: "bld. Dacia 1, Chisinau, Moldova",
+};
+
+person.age = 111;
+delete person.address;
+Object.defineProperty(person, "id", {
+  writable: false,
+  configurable: false,
+});
+```
+
+Mutarea unui obiect are atât avantaje, cât și dezavantaje. Să le analizăm:
+
+Avantaje:
+
+- Codul cu mutație poate fi mai performant la un număr mare de operații și pe dispozitive slabe, deoarece nu este necesar să se creeze obiecte suplimentare și să se copieze date în ele.
+
+Dezavantaje:
+
+- Codul devine mai imprevizibil. Mutăm obiectul într-un loc, iar în altul acest lucru poate duce la consecințe neașteptate.
+- În codul în care există mutații ale obiectelor care vin din parametri, este dificil să se detecteze și să se depaneze bug-uri.
+- Poate apărea o condiție de concurență în care obiectul este mutat simultan, ceea ce duce la un rezultat imprevizibil.
+
+## Cum să înțelegem că este o mutație?
+
+Este uneori dificil de observat că un obiect este mutat. De obicei, în timpul dezvoltării, ne dăm seama că ceva nu este în regulă cu obiectul și apoi începem depanarea. Prin aceste semne putem înțelege că obiectul trebuie verificat pentru mutații:
+
+- Ordinea elementelor nu este cea așteptată (relevant pentru array-uri).
+- Obiectul are proprietăți care nu ar trebui să fie acolo sau, dimpotrivă, lipsesc proprietăți care ar trebui să fie prezente. De exemplu, știm sigur că ar trebui să avem un array gol și descoperim că acesta conține elemente.
+- `console.log()` în browser se comportă ciudat, arătând într-o previzualizare anumite proprietăți, iar la extinderea obiectului, altele.
+
+## Depanare
+
+Să presupunem că am înțeles că obiectul este mutat și este timpul să căutăm unde se întâmplă acest lucru. În această etapă, putem folosi mai multe abordări pentru depanare. De cele mai multe ori le combinăm. Să le analizăm pe fiecare în parte.
+
+### „Parcurgerea rapidă” în căutarea locurilor de mutație
+
+Putem începe căutarea prin a parcurge rapid codul în căutarea cauzelor cunoscute ale mutației:
+
+- adăugarea, modificarea sau ștergerea explicită a proprietăților;
+- utilizarea metodelor care mută obiectul. De exemplu, pentru array-uri acestea sunt `sort()`, `reverse()`, `splice()`, `push()`, `pop()`, `shift()`, `unshift()`.
+
+Dacă acest obiect este transmis foarte adânc în cod, poate fi dificil să găsim mutația în acest mod.
+
+### Logarea obiectului
+
+În timp ce parcurgem codul, putem loga obiectele înainte și după locul unde ar putea fi problema. În `console.log()` de dinaintea codului, trebuie să afișăm o copie profundă a obiectului, iar după cod, obiectul original. După al doilea `console.log()`, trebuie să întrerupem execuția codului, astfel încât codul care urmează să nu afecteze obiectul.
+
+```js
+const person = {};
+
+console.log(structuredClone(person));
+suspiciousFunction(person);
+console.log(person);
+
+// oprim execuția codului,
+// astfel încât codul de mai jos
+// să nu mute obiectul
+debugger;
+```
+
+Dacă obiectele nu diferă vizual, înseamnă că probabil mutația este undeva mai departe.
+
+
+<Callout variant="info">
+**Particularități ale funcționării `console.log()` în browser**
+
+La logarea unui obiect cu `console.log()`, inițial se afișează o previzualizare a conținutului acestui obiect. La clic pe previzualizare, obiectul se extinde și vedem proprietățile de nivel superior și previzualizări ale proprietăților de nivel inferior.
+
+Pentru previzualizare, valorile sunt afișate în mod leneș la prima afișare a previzualizării și nu se mai schimbă după aceea.
+
+Pentru starea extinsă, valorile sunt preluate la extinderea obiectului. Browserele au implementat această logică diferit:
+
+- În Chrome și Firefox, după ce proprietățile au fost afișate, ele nu se mai actualizează. Logica este aceeași ca și pentru previzualizare.
+- În Safari, valorile proprietăților obiectului se actualizează la fiecare extindere a obiectului.
+
+</Callout>
+
+### Depanare cu ajutorul DevTools din browser
+
+Adăugăm `debugger` sau un punct de întrerupere, deschidem DevTools din browser și începem depanarea. Pentru a vedea proprietățile obiectului în timp real, pe durata depanării, putem adăuga obiectul într-o variabilă globală și apoi să adăugăm această variabilă în secțiunea Watch.
+
+<figure>
+  <Picture
+    src={ChromeScreenshot}
+    widths={[480, 720, 960, 1015, 1440, 2030]}
+    sizes={`(min-width: ${breakpoints.xs}) 100vw, 480px`}
+    formats={["avif", "webp"]}
+    quality={70}
+    alt="Chrome DevTools în modul de depanare. Variabila person a fost adăugată în window, iar window.person a fost adăugată în Watch."
+    pictureAttributes={{
+      style: {
+        aspectRatio: `${ChromeScreenshot.width} / ${ChromeScreenshot.height}`,
+      },
+    }}
+  />
+  <figcaption>Chrome DevTools în modul de depanare</figcaption>
+</figure>
+
+### Depanare cu ajutorul Proxy
+
+`Proxy` ne permite să adăugăm „capcane” (traps) care sunt apelate la diferite acțiuni asupra obiectelor (la apelarea metodelor interne). Exact ceea ce avem nevoie pentru a găsi unde are loc mutația. Ne interesează următoarele „capcane”:
+
+
+- <Link external href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy/Proxy/set">set()</Link> – este apelată la atribuirea unei valori unei proprietăți;
+- <Link external href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy/Proxy/deleteProperty">deleteProperty()</Link>– este apelată la ștergerea unei proprietăți;
+- <Link external href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy/Proxy/defineProperty">defineProperty()</Link> – este apelată la crearea unei noi proprietăți.
+
+Creăm un `Proxy` cu aceste capcane și în fiecare dintre ele adăugăm `debugger`, astfel încât la depanare în DevTools, după ieșirea din codul Proxy, să vedem unde are loc mutația. Un exemplu de cum se poate implementa este prezentat mai jos:
+
+```js
+const defaultHandler = {
+  set(target, property, value, receiver) {
+    debugger;
+    console.log(
+      `Property "${property}" changed from ${target[property]} to ${value}`,
+    );
+    return Reflect.set(target, property, value, receiver);
+  },
+  deleteProperty(target, property) {
+    debugger;
+    console.log(`Property "${property}" deleted`);
+    return Reflect.deleteProperty(target, property);
+  },
+  defineProperty(target, property, descriptor) {
+    debugger;
+    console.log(`Property "${property}" defined`);
+    return Reflect.defineProperty(target, property, descriptor);
+  },
+};
+
+function createDeepProxy(
+  target,
+  handler = defaultHandler,
+  proxyMap = new WeakMap(),
+) {
+  if (target !== null && typeof target === "object") {
+    // Returnăm proxy dacă deja a fost creat
+    // (pentru a evita recursivitatea infinită)
+    if (proxyMap.has(target)) {
+      return proxyMap.get(target);
+    }
+
+    const proxy = new Proxy(target, handler);
+    proxyMap.set(target, proxy);
+
+    // Creăm recursiv proxy pentru obiectele imbricate
+    for (const key of Reflect.ownKeys(target)) {
+      const value = target[key];
+      if (value !== null && typeof value === "object") {
+        target[key] = createDeepProxy(value, handler, proxyMap);
+      }
+    }
+
+    return proxy;
+  }
+
+  // Returnează target dacă nu este un obiect
+  return target;
+}
+
+const person = {
+  id: "12345",
+  name: "Alex",
+  address: "bld. Dacia 1, Chisinau, Moldova",
+};
+
+// Creăm proxy și îl folosim
+// în locul obiectului original
+const proxy = createDeepProxy(person);
+```
+
+### Utilizarea AI
+
+Putem oferi codul unui AI și în prompt să îi cerem să găsească toate locurile unde se efectuează mutații. Dacă știm că eroarea apare doar într-un singur fișier, putem folosi interfața web ChatGPT sau alte servicii similare. Dacă sunt multe astfel de fișiere, acest lucru devine incomod.
+
+În Github Copilot Chat din VSCode există posibilitatea de a specifica ca acesta să execute promptul pe toate fișierele din workspace; pentru aceasta, la începutul promptului trebuie să folosim extensia `@workspace`.
+
+<Callout variant="warning">
+Înainte de a folosi AI pentru analiza codului de lucru, asigură-te că compania la care lucrezi permite acest lucru.
+</Callout>
+
+## Cum putem evita mutațiile
+
+Iată câteva idei despre cum putem evita mutațiile:
+
+- Folosește regula ESLint care marchează ca eroare modificarea parametrilor funcției (<Link external href="https://eslint.org/docs/latest/rules/no-param-reassign">no-param-reassign</Link>);
+- Utilizează TypeScript pentru tipizare strictă și identificarea posibilelor mutații în timpul compilării;
+- Introdu în echipă o convenție despre când este permis să se mute și când nu. De exemplu, să nu se mute niciodată obiectele care vin în parametrii funcției sau în props-urile componentelor React.
+- În locul metodelor care mută, utilizează alternative nemutante:
+  - `sort()` → `toSorted()`
+  - `reverse()` → `toReversed()`
+  - `splice()` → `toSpliced()`
+
+  Înainte de utilizare, verifică dacă suportul browserelor îți este adecvat.
+
+- Utilizează structuri de date imutabile din biblioteci sau creează-le pe ale tale folosind `Object.freeze()`, descriptorul proprietății `writable: false` (poate fi setat folosind `Object.defineProperty()`) sau un descriptor set care nu va atribui o nouă valoare proprietății.
+
+
