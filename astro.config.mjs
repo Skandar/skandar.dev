@@ -33,7 +33,7 @@ export default defineConfig({
         // https://shiki.style/languages
         // langs: [],
         // Enable word wrap to prevent horizontal scrolling
-        wrap: true,
+        // wrap: true,
         // Transformers https://shiki.style/packages/transformers
         // transformers: [
         //   transformerNotationHighlight(),
