@@ -35,17 +35,31 @@ globalStyle(":root", {
   },
 });
 
+globalStyle(".astro-code, .astro-code span", {
+  fontSize: tokens.typography.text.xs.fontSize,
+});
+
+// We set the styles for dark theme if
+// - the user has set the theme in app to dark
+// - the user has not set the theme in app and the system theme is dark
+// - the user has set the theme in app to system and the system theme is dark
+// - JS disabled and the `data-theme` attribute doesn't set and the system theme is dark
+//
+// In all other cases, the styles for light theme will be applied
+globalStyle(
+  ":root[data-theme=system] :where(.astro-code, .astro-code span), :root:not([data-theme]) :where(.astro-code, .astro-code span)",
+  {
+    "@media": {
+      "(prefers-color-scheme: dark)": {
+        color: "var(--shiki-dark) !important",
+        backgroundColor: "var(--shiki-dark-bg) !important",
+      },
+    },
+  },
+);
 globalStyle(":root[data-theme=dark] :where(.astro-code, .astro-code span)", {
   color: "var(--shiki-dark) !important",
   backgroundColor: "var(--shiki-dark-bg) !important",
-});
-globalStyle(":root[data-theme=system] :where(.astro-code, .astro-code span)", {
-  "@media": {
-    "(prefers-color-scheme: dark)": {
-      color: "var(--shiki-dark) !important",
-      backgroundColor: "var(--shiki-dark-bg) !important",
-    },
-  },
 });
 
 globalStyle("*, *::before, *::after", {

@@ -42,27 +42,26 @@ const buttons = [
 </section>
 
 <script is:inline>
-  const theme = localStorage.getItem("theme");
+  const theme = localStorage.getItem("theme") || "system";
 
-  if (theme) {
-    document.documentElement.setAttribute("data-theme", theme);
+  document.documentElement.setAttribute("data-theme", theme);
 
-    const themeSwitcher = document.getElementById("theme-switcher");
-    const buttons = themeSwitcher.querySelectorAll("button");
-    // We can't import TS files in Astro, so we use data attributes to pass the class names
-    const filledButtonClass = themeSwitcher.dataset.filledClass;
-    const outlineButtonClass = themeSwitcher.dataset.outlineClass;
+  const themeSwitcher = document.getElementById("theme-switcher");
+  const buttons = themeSwitcher.querySelectorAll("button");
 
-    buttons.forEach((button) => {
-      if (button.getAttribute("value") === theme) {
-        button.setAttribute("aria-pressed", "true");
-        button.classList.replace(outlineButtonClass, filledButtonClass);
-      } else {
-        button.setAttribute("aria-pressed", "false");
-        button.classList.replace(filledButtonClass, outlineButtonClass);
-      }
-    });
-  }
+  // We can't import TS files in Astro, so we use data attributes to pass the class names
+  const filledButtonClass = themeSwitcher.dataset.filledClass;
+  const outlineButtonClass = themeSwitcher.dataset.outlineClass;
+
+  buttons.forEach((button) => {
+    if (button.getAttribute("value") === theme) {
+      button.setAttribute("aria-pressed", "true");
+      button.classList.replace(outlineButtonClass, filledButtonClass);
+    } else {
+      button.setAttribute("aria-pressed", "false");
+      button.classList.replace(filledButtonClass, outlineButtonClass);
+    }
+  });
 </script>
 
 <script>
