@@ -30,6 +30,26 @@ const variant = styleVariants({
   },
   warning: {
     backgroundColor: tokens.theme.colors.foreground,
+    borderInlineStartWidth: tokens.sizes[4],
+
+    selectors: {
+      "&::before": {
+        content: '""',
+        position: "absolute",
+        insetInlineStart: calc.negate(tokens.sizes[4]),
+        insetBlockStart: 0,
+        width: tokens.sizes[4],
+        height: "100%",
+
+        background: `repeating-linear-gradient(
+          45deg,
+          ${tokens.theme.colors.accent},
+          ${tokens.theme.colors.accent} ${tokens.sizes[8]},
+          ${tokens.theme.colors.foreground} ${tokens.sizes[8]},
+          ${tokens.theme.colors.foreground} ${tokens.sizes[16]}
+        )`,
+      },
+    },
   },
 });
 

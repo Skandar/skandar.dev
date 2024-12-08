@@ -4,26 +4,40 @@ import { breakpoints } from "~/styles/tokens";
 
 const body = style({
   display: "grid",
-  gridTemplateColumns: "1fr",
   marginInline: "auto",
   rowGap: tokens.spaces[16],
-
-  "@media": {
-    [`all and (min-width: ${breakpoints.sm})`]: {
-      gridTemplateColumns: `[full-start] ${tokens.spaces[36]} [content-start] 1fr [content-end]  ${tokens.spaces[36]}  [full-end]`,
-    },
-  },
+  gridTemplateColumns: `
+    [full-start]
+    ${tokens.spaces[36]}
+    [content-start]
+    1fr
+    [content-end]
+    ${tokens.spaces[36]}
+    [full-end]
+  `,
 });
 
 globalStyle(
   `${body} > :where(p, h1, h2, h3, h4, h5, h6, ul, ol, pre, table, blockquote, aside, article, div, [data-footnotes])`,
   {
-    gridColumn: "content",
+    gridColumn: "full",
+
+    "@media": {
+      [`all and (min-width: ${breakpoints.sm})`]: {
+        gridColumn: "content",
+      },
+    },
   },
 );
 
 globalStyle(`${body} :where(pre, img, :has(img))`, {
   gridColumn: "full",
+
+  "@media": {
+    [`all and (min-width: ${breakpoints.sm})`]: {
+      gridColumn: "content",
+    },
+  },
 });
 
 globalStyle(`${body} > img, ${body} :has(img)`, {
