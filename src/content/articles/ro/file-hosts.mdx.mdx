@@ -1,0 +1,86 @@
+---
+title: "Fișierul /etc/hosts"
+description: "În această săptămână m-am confruntat cu o sarcină în care trebuia să testez local funcționarea unei resurse externe. Problema era că resursa funcționa doar pentru o anumită listă de domenii. În acel moment mi-am amintit de metoda de suprascriere a adresei resursei în fișierul /etc/hosts. Și a funcționat!"
+publishedTime: "Dec 17 2024"
+modifiedTime: "Dec 17 2024"
+tags: ["DNS"]
+ogImage: "/images/object-mutation-debugging/ro.jpg"
+---
+
+În această săptămână m-am confruntat cu o sarcină în care trebuia să testez local funcționarea unei resurse externe. Problema era că resursa funcționa doar pentru o anumită listă de domenii. În acel moment mi-am amintit de metoda de suprascriere a adresei resursei în fișierul `hosts`. Și a funcționat!
+
+Hai să vedem mai în detaliu ce este acest fișier și cum ne poate fi de ajutor.
+
+## Ce este fișierul hosts?
+
+Este un fișier text care poate conține:
+
+- Linii de forma: adresă IP + nume de host (domeniu) + alias (opțional), separate prin spații. Adresa IP poate fi IPv4 sau IPv6.
+- Comentarii — text care începe cu „#”.
+
+Un exemplu de cum poate arăta:
+
+```plaintext
+# Acesta este adresa loopback în IPv4
+127.0.0.1 localhost
+# Acesta este adresa loopback în IPv6
+::1       localhost
+
+# Adresă suprascrisă
+127.0.0.1 skandar.dev
+```
+
+Locația sa diferă în funcție de sistemul de operare:
+
+- În macOS, Unix și sistemele similare Unix — se află la `/etc/hosts`.
+- În Windows — `C:\​Windows\​System32\​drivers\​etc\​hosts`.
+
+Poți citi mai multe detalii <Link href="https://en.wikipedia.org/wiki/Hosts_(file)#Location_in_the_file_system" external>aici</Link>.
+
+Editarea acestui fișier se poate face doar cu drepturi de superutilizator (administrator).
+
+## De ce este util?
+
+La rezolvarea numelui unui host, sistemul verifică mai întâi dacă există o înregistrare pentru acel host în fișierul `hosts`. Dacă există, se va returna adresa IP specificată, iar sistemul nu va mai interoga serverul DNS.
+
+Să analizăm câteva scenarii comune de utilizare:
+
+- **Accelerarea rezolvării adresei**. Putem „sugera” sistemului ce adresă IP corespunde domeniului. Deoarece sistemul deja știe adresa IP, nu mai are nevoie să facă o interogare DNS, reducând astfel timpul de răspuns.
+- **Blocarea reclamelor, trackerelor și site-urilor malițioase**. Folosind fișierul `hosts`, putem bloca solicitările către servicii de publicitate și trackere. Există chiar și liste publice cu astfel de domenii: <Link href="https://raw.githubusercontent.com/StevenBlack/hosts/refs/heads/master/hosts" external>exemplu</Link> și <Link href="https://raw.githubusercontent.com/Ultimate-Hosts-Blacklist/Ultimate.Hosts.Blacklist/refs/heads/master/hosts/hosts0" external>încă unul</Link>.
+- **Blocarea serverului de licențe**. Aplicațiile piratate pot astfel bloca solicitările către serverul de licențiere, împiedicându-l să dezactiveze aplicația piratată sau să reseteze activarea ilicită. Într-o variantă alternativă, adresa serverului de licențe este înlocuită cu una dorită de pirați, iar aplicația „crede” că serverul nu este disponibil și continuă să funcționeze offline.
+- **Blocarea actualizărilor de securitate**. Infractorii pot astfel preveni actualizarea unui antivirus.
+- **Redirecționarea traficului prin serverele atacatorilor**. În combinație cu alte tehnici, atacatorii pot folosi înregistrări DNS false în `hosts` pentru a redirecționa traficul prin serverul lor, permițând interceptarea datelor, modificarea lor „din mers” sau injectarea de conținut malițios.
+- **Obținerea accesului**. Un domeniu poate fi indisponibil din cauza unei defecțiuni tehnice sau a unei blocări din partea furnizorului. Dacă știm adresa IP a resursei, o putem specifica în `hosts`, astfel încât sistemul să nu mai interogheze serverul DNS al furnizorului.
+
+## Utilitatea în dezvoltare
+
+Suprascrierea adreselor domeniilor poate fi utilă și în dezvoltare. Iată câteva exemple:
+
+- **Utilizarea serviciilor cu restricții de domeniu**. Serviciul poate avea o listă de domenii permise. De exemplu, cheile API în Google funcționează astfel:
+
+```plaintext
+127.0.0.1 skandar.dev
+```
+
+<Callout variant="warning">
+**Domenii în zona .dev**
+
+Dacă folosești un domeniu din zona .dev, browserul va face mereu redirect la HTTPS și va afișa eroarea `ERR_​SSL_​PROTOCOL_​ERROR`.
+
+Pentru ca totul să funcționeze, va trebui să configurezi HTTPS pe serverul de dezvoltare și, posibil, să creezi un certificat propriu pentru domeniul necesar.
+
+</Callout>
+
+- **Testarea codului dependent de un anumit domeniu/subdomeniu**. De exemplu, dacă aplicația este disponibilă în diferite țări, în funcție de subdomeniu va fi în limba acelei țări și cu modificările aferente. Putem „direcționa” domeniul spre localhost și apoi utiliza domeniul cu subdomenii la nivel local.
+
+<Callout variant="info">
+**Subdomenii pentru localhost**
+
+Poți utiliza subdomenii și pentru `localhost` (de exemplu, `fr.​localhost:​3333`), dar nu va funcționa în toate browserele: în Chrome și Firefox funcționează, în Safari — nu.
+
+</Callout>
+
+- **Mutarea pe un nou hosting**. La schimbarea hostingului, poate fi nevoie de ceva timp (până la 72 de ore) pentru ca actualizările să ajungă la serverul DNS autoritativ. Poți evita așteptarea adăugând în `hosts` o înregistrare cu noua adresă IP, pentru a verifica cum funcționează aplicația pe noul hosting.
+- **Înlocuirea unei resurse externe**. Uneori, aplicația noastră folosește un API extern și vrem să-l înlocuim cu unul local, de exemplu un server de dezvoltare local. Adăugând suprascrierea adresei în `hosts`, nu mai trebuie să modificăm codul pentru a face asta.
+
+Fișierul `hosts` este un instrument simplu, dar puternic, care îți permite să controlezi suprascrierea locală a adreselor IP pentru domenii. Când va trebui să rulezi cod care funcționează doar cu un anumit domeniu sau subdomeniu, amintește-ți de fișierul `hosts` — te poate ajuta să rezolvi această problemă.
