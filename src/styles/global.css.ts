@@ -106,6 +106,7 @@ globalStyle("body", {
   fontSize: tokens.typography.text.md.fontSize,
   lineHeight: 1.5,
   backgroundColor: tokens.theme.colors.background,
+  wordBreak: "break-word",
 });
 
 globalStyle("button", {
