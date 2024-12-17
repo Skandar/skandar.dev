@@ -13,7 +13,7 @@ const callout = style({
   paddingInline: tokens.spaces[24],
   marginBlock: tokens.spaces[24],
   backgroundColor: tokens.theme.colors.foreground,
-  borderInlineStart: `${tokens.sizes[4]} solid ${tokens.theme.colors.accent}`,
+  borderInlineStart: `${tokens.sizes[4]} solid transparent`,
   borderInlineEnd: `${tokens.sizes[4]} solid transparent`,
 
   "@media": {
@@ -27,6 +27,7 @@ const callout = style({
 const variant = styleVariants({
   info: {
     backgroundColor: tokens.theme.colors.foreground,
+    borderInlineStartColor: tokens.theme.colors.accent,
   },
   warning: {
     backgroundColor: tokens.theme.colors.foreground,
