@@ -1,0 +1,85 @@
+---
+title: "File /etc/hosts"
+description: "This week, I faced a task where I needed to test the functionality of an external resource locally. The problem was that the resource had a restriction allowing it to run only on a predefined list of domains. At that moment, I remembered the method of overriding the resource’s address in the /etc/hosts file. And it worked!"
+publishedTime: "Dec 17 2024"
+modifiedTime: "Dec 17 2024"
+tags: ["DNS"]
+ogImage: "/images/file-hosts/en.jpg"
+---
+
+This week, I faced a task where I needed to test the functionality of an external resource locally. The problem was that the resource had a restriction allowing it to run only on a predefined list of domains. At that moment, I remembered the method of overriding the resource’s address in the `/etc/hosts` file. And it worked!
+
+Let's take a closer look at what this file is and how it can be useful.
+
+## What is the hosts file?
+
+It's a text file that can contain:
+
+- Lines of the form: IP address + hostname (domain) + alias (optional), separated by spaces. The IP address can be either IPv4 or IPv6.
+- Comments — text starting with "#".
+
+Here’s an example of what it might look like:
+
+```plaintext
+# This is the IPv4 loopback address
+127.0.0.1 localhost
+# This is the IPv6 loopback address
+::1       localhost
+
+# Overridden address
+127.0.0.1 skandar.dev
+```
+
+Its location differs depending on the operating system:
+
+- On macOS, Unix, and Unix-like systems, it is at `/etc/hosts`.
+- On Windows, it is at `C:\​Windows\​System32\​drivers\​etc\​hosts`.
+
+You can read more about this <Link href="https://en.wikipedia.org/wiki/Hosts_(file)#Location_in_the_file_system" external>here</Link>.
+
+You need superuser (administrator) privileges to edit this file.
+
+## Why do we need it?
+
+When resolving a hostname, the system first checks if there’s a corresponding entry in the hosts file. If there is, it will return the IP address specified in that file and will not query a DNS server.
+
+Let’s consider some common usage scenarios:
+
+- **Speeding up address resolution**. We can "tell" the system which IP address corresponds to a domain. Since the system already knows the IP address, it doesn’t need to make a DNS request, reducing the response time by the duration of that request.
+- **Blocking ads, trackers, and malicious sites**. By using the hosts file, we can block requests to advertising services and trackers. There are even publicly available lists with such domains: <Link href="https://raw.githubusercontent.com/StevenBlack/hosts/refs/heads/master/hosts" external>example</Link> and <Link href="https://raw.githubusercontent.com/Ultimate-Hosts-Blacklist/Ultimate.Hosts.Blacklist/refs/heads/master/hosts/hosts0" external>another one</Link>.
+- **Blocking license servers**. Pirated applications can block requests to a license server so it can’t invalidate the cracked application or reset its pirate activation. Alternatively, they can substitute the license server’s address so that the app “thinks” the server is unavailable and continues operating in offline mode.
+- **Blocking security updates**. Attackers can prevent antivirus updates by blocking update servers in the hosts file.
+- **Redirecting traffic through an attacker’s servers**. In combination with other techniques, attackers can use fake DNS entries in hosts to redirect traffic through their own server. This allows them to intercept data, modify it on the fly, or inject malicious content.
+- **Gaining access**. A domain might be inaccessible due to technical issues or ISP-level blocking. If we know the resource’s IP address, we can specify it in hosts, and the system will not make requests to the provider’s DNS server.
+
+## Benefits in development
+
+Overriding domain addresses can also be useful in development. Let's consider a few examples of use cases:
+
+- **Using services restricted by domain**. A service may have a list of allowed domains for which it is available. For example, API keys in Google work this way.
+
+```plaintext
+127.0.0.1 skandar.dev
+```
+
+<Callout variant="warning">
+**Domains in the .dev Top-Level Domain**
+
+If you use a domain in the .dev TLD, the browser will always redirect to HTTPS and return an `ERR_​SSL_​PROTOCOL_​ERROR`.
+
+To make it work, you’ll need to set up HTTPS on your dev server and possibly create a certificate for the required domain.
+
+</Callout>
+
+- **Testing code that depends on a domain/subdomain**. For instance, if the application is available in different countries, it may change language and other settings depending on the subdomain. We can map the domain to localhost and then use the domain with subdomains locally.
+
+<Callout variant="info">
+  **Subdomains for `localhost`** You can use subdomains for localhost (for
+  example, `fr.​localhost:​3333`), but this won’t work in all browsers. It works
+  in Chrome and Firefox, but not in Safari.
+</Callout>
+
+- **Migrating to a new hosting provider**. When changing hosting providers, it can take some time (up to 72 hours) for updates to reach the authoritative DNS server. Instead of waiting, you can add an entry with the new IP address to test how the application works on the new hosting right away.
+- **Overriding an external resource**. Sometimes your application uses a third-party API, and you want to replace it with a local variant, for example, a local dev server. By adding an overriding entry in `hosts`, you don’t need to change the code to do this.
+
+The `hosts` file is a simple yet powerful tool that allows you to manage local IP address overrides for domains. The next time you need to run code that only works with a certain domain or subdomain, remember the `hosts` file — it will help you solve that problem.
