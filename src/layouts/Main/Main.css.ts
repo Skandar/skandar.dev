@@ -11,7 +11,7 @@ const hero = style({
 });
 
 const heroTitle = style({
-  fontSize: "min(7.3rem, 14vw)",
+  fontSize: "min(7.2rem, 14vw)",
   lineHeight: 1,
   textTransform: "uppercase",
 });
