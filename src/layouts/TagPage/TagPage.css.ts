@@ -2,7 +2,7 @@ import { style } from "@vanilla-extract/css";
 
 import { tokens } from "~/styles/themes.css";
 
-const section = style({
+const root = style({
   flexGrow: 1,
 });
 
@@ -16,4 +16,10 @@ const tag = style({
   borderRadius: tokens.borders.radii[4],
 });
 
-export const styles = { section, title, tag };
+const wrapper = style({
+  display: "flex",
+  flexDirection: "column",
+  gap: tokens.spaces[64],
+});
+
+export const styles = { root, title, tag, wrapper };

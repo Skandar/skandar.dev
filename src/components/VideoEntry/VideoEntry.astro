@@ -1,0 +1,36 @@
+---
+import { Image } from "astro:assets";
+import { styles } from "./VideoEntry.css";
+
+interface Props {
+  titleLevel: number;
+  title: string;
+  description: string;
+  href: string;
+  videoCoverUrl: string;
+  videoCoverAlt: string;
+}
+
+const { titleLevel, title, description, href, videoCoverUrl, videoCoverAlt } =
+  Astro.props;
+
+const TitleTag = `h${titleLevel}`;
+---
+
+<article class={styles.entry}>
+  <a href={href} class={styles.link} data-astro-prefetch>
+    <figure class={styles.figure}>
+      <Image
+        src={videoCoverUrl}
+        alt={videoCoverAlt}
+        width={1280}
+        height={720}
+        class={styles.image}
+      />
+      <figcaption class={styles.caption}>
+        <TitleTag class:list={[styles.title]}>{title}</TitleTag>
+        {description && <p class={styles.description}>{description}</p>}
+      </figcaption>
+    </figure>
+  </a>
+</article>

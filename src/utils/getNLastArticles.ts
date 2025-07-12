@@ -1,7 +1,7 @@
 import type { AnyEntryMap, CollectionEntry } from "astro:content";
 
-export const getNLastArticles = (
-  articles: CollectionEntry<keyof AnyEntryMap>[],
+export const getNLastArticles = <T extends keyof AnyEntryMap>(
+  articles: CollectionEntry<T>[],
   n: number = 5,
 ) => {
   const sortedArticles = [...articles];

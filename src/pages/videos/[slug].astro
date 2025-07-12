@@ -1,0 +1,39 @@
+---
+import { type CollectionEntry, getCollection } from "astro:content";
+
+import VideoLayout from "~/layouts/Video/Video.astro";
+import { getPathWithoutLocale } from "~/utils/getPathWithoutLocale";
+import { getCollectionFilter } from "~/utils/getCollectionFilter";
+import { customComponents } from "~/components/ArticleComponents";
+
+export async function getStaticPaths() {
+  const isDev = import.meta.env.DEV || false;
+
+  const entries = await getCollection("videos", ({ data, slug }) => {
+    return getCollectionFilter({
+      lang: "en",
+      slug,
+      isDev,
+      draft: data.draft,
+    });
+  });
+
+  return entries.map((entry) => ({
+    params: {
+      category: entry.collection,
+      slug: getPathWithoutLocale(entry.slug),
+    },
+    props: entry,
+  }));
+}
+
+type Props = CollectionEntry<"videos">;
+
+const { data, render, slug, collection } = Astro.props;
+
+const { Content } = await render();
+---
+
+<VideoLayout slug={slug} collection={collection} {...data}>
+  <Content components={customComponents} />
+</VideoLayout>

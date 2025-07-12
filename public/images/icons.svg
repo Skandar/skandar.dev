@@ -1,19 +1,22 @@
 <svg xmlns="http://www.w3.org/2000/svg">
-<symbol id="info" width="33" height="32" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M18.138 9.086h-3.52v3.52h3.52v-3.52ZM14.618 22.914v-8.748h3.52v8.748h-3.52Z" fill="currentColor"/><path fill-rule="evenodd" clip-rule="evenodd" d="M1.878 4v24l2.5 2.5h24l2.5-2.5V4l-2.5-2.5h-24L1.878 4Zm25 .5h-21l-1 1v21l1 1h21l1-1v-21l-1-1Z" fill="currentColor"/></symbol>
+  <symbol id="info" width="32" height="32" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M18.138 9.086h-3.52v3.52h3.52v-3.52ZM14.618 22.914v-8.748h3.52v8.748h-3.52Z" fill="currentColor"/><path fill-rule="evenodd" clip-rule="evenodd" d="M1.878 4v24l2.5 2.5h24l2.5-2.5V4l-2.5-2.5h-24L1.878 4Zm25 .5h-21l-1 1v21l1 1h21l1-1v-21l-1-1Z" fill="currentColor"/></symbol>
 
-<symbol id="warning" width="32" height="32" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M30.775 30.07H1.225L0 27.965 14.775 1.93h2.45L32 27.965l-1.225 2.105ZM3.64 27.255h24.72L16 5.5 3.64 27.255Zm10.6-15.36v8.745h3.5v-8.745h-3.5Z" fill="currentColor"/><path d="M17.76 22.21h-3.52v3.52h3.52v-3.52Z" fill="currentColor"/></symbol>
+  <symbol id="warning" width="32" height="32" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M30.775 30.07H1.225L0 27.965 14.775 1.93h2.45L32 27.965l-1.225 2.105ZM3.64 27.255h24.72L16 5.5 3.64 27.255Zm10.6-15.36v8.745h3.5v-8.745h-3.5Z" fill="currentColor"/><path d="M17.76 22.21h-3.52v3.52h3.52v-3.52Z" fill="currentColor"/></symbol>
 
 
-<symbol id="burger" width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-<rect width="8" height="8" fill="currentColor"/>
-<rect y="12" width="8" height="8" fill="currentColor"/>
-<rect x="12" y="12" width="8" height="8" fill="currentColor"/>
-<rect x="12" width="8" height="8" fill="currentColor"/>
-<rect x="24" width="8" height="8" fill="currentColor"/>
-<rect x="24" y="12" width="8" height="8" fill="currentColor"/>
-<rect x="24" y="24" width="8" height="8" fill="currentColor"/>
-<rect x="12" y="24" width="8" height="8" fill="currentColor"/>
-<rect y="24" width="8" height="8" fill="currentColor"/>
-</symbol>
+  <symbol id="burger" width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="8" height="8" fill="currentColor"/>
+  <rect y="12" width="8" height="8" fill="currentColor"/>
+  <rect x="12" y="12" width="8" height="8" fill="currentColor"/>
+  <rect x="12" width="8" height="8" fill="currentColor"/>
+  <rect x="24" width="8" height="8" fill="currentColor"/>
+  <rect x="24" y="12" width="8" height="8" fill="currentColor"/>
+  <rect x="24" y="24" width="8" height="8" fill="currentColor"/>
+  <rect x="12" y="24" width="8" height="8" fill="currentColor"/>
+  <rect y="24" width="8" height="8" fill="currentColor"/>
+  </symbol>
 
+  <symbol id="play" width="64px" height="64px" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path fill="currentColor" d="M61.115,18.856C63.666,21.503,64,25.709,64,36s-0.334,14.497-2.885,17.144C58.563,55.791,55.906,56,36,56	s-22.563-0.209-25.115-2.856C8.334,50.497,8,46.291,8,36s0.334-14.497,2.885-17.144S16.094,16,36,16S58.563,16.209,61.115,18.856z M31.464,44.476l13.603-8.044l-13.603-7.918V44.476z"/>
+  </symbol>
 </svg>

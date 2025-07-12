@@ -1,0 +1,28 @@
+---
+import type { CollectionEntry } from "astro:content";
+import { Image } from "astro:assets";
+
+import Link from "~/components/Link/Link.astro";
+import ArticleLayout from "~/layouts/Article/Article.astro";
+import { styles } from "./Video.css";
+
+type Props = CollectionEntry<"videos">["data"] & {
+  slug: string;
+  collection: string;
+};
+
+const { videoUrl, videoCoverUrl, videoCoverAlt, ...restProps } = Astro.props;
+---
+
+<ArticleLayout {...restProps}>
+  <Link external href={videoUrl} class={styles.videoLink}>
+    <Image src={videoCoverUrl} width={1280} height={720} alt={videoCoverAlt} />
+
+    <div class={styles.playButton}>
+      <svg class={styles.playButtonIcon}>
+        <use href="/images/icons.svg#play"></use>
+      </svg>
+    </div>
+  </Link>
+  <slot />
+</ArticleLayout>

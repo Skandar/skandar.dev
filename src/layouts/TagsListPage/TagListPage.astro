@@ -24,9 +24,18 @@ const articles = await getCollection("articles", ({ data, slug }) =>
   }),
 );
 
-const entriesMap = articles.reduce(
-  (acc, article) => {
-    const tags = article.data.tags || [];
+const videos = await getCollection("videos", ({ data, slug }) =>
+  getCollectionFilter({
+    lang: currentLocale,
+    slug,
+    isDev,
+    draft: Boolean(data.draft),
+  }),
+);
+
+const entriesMap = [...videos, ...articles].reduce(
+  (acc, item) => {
+    const tags = item.data.tags || [];
 
     for (const tag of tags) {
       if (acc[tag]) {
