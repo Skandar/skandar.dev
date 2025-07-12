@@ -4,11 +4,11 @@ import { styles } from "./ArticleEntry.css";
 interface Props {
   titleLevel: number;
   title: string;
-  descirption: string;
+  description: string;
   href: string;
 }
 
-const { titleLevel, title, descirption, href } = Astro.props;
+const { titleLevel, title, description, href } = Astro.props;
 
 const TitleTag = `h${titleLevel}`;
 ---
@@ -16,6 +16,6 @@ const TitleTag = `h${titleLevel}`;
 <article class={styles.entry}>
   <a href={href} class={styles.link} data-astro-prefetch>
     <TitleTag class:list={[styles.title]}>{title}</TitleTag>
-    {descirption && <p class={styles.description}>{descirption}</p>}
+    {description && <p class={styles.description}>{description}</p>}
   </a>
 </article>

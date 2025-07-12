@@ -5,21 +5,45 @@ import ArticleList from "~/components/ArticleList/ArticleList.astro";
 import { useTranslations } from "~/i18n/utils";
 import { DEFAULT_LANG, type Language } from "~/i18n/ui";
 import { styles } from "./TagPage.css";
+import VideoList from "~/components/VideoList/VideoList.astro";
 
 const { currentLocale = DEFAULT_LANG } = Astro;
-const { entries, tag } = Astro.props;
+const { articles, videos, tag } = Astro.props;
 
 const t = useTranslations(currentLocale as Language);
 ---
 
 <PageLayout>
-  <section class={styles.section}>
+  <div class={styles.root}>
     <Container>
-      <h1 class={styles.title} id="articles">
-        {t("tagPage.title")}
-        <span class={styles.tag}>{tag}</span>
-      </h1>
-      <ArticleList entries={entries} />
+      <div class={styles.wrapper}>
+        <h1 class={styles.title}>
+          {t("tagPage.title.main")}
+          <span class={styles.tag}>{tag}</span>
+        </h1>
+
+        {
+          articles.length > 0 && (
+            <section>
+              <h2 class={styles.title} id="articles">
+                {t("tagPage.title.articles")}
+              </h2>
+              <ArticleList entries={articles} />
+            </section>
+          )
+        }
+
+        {
+          videos.length > 0 && (
+            <section>
+              <h2 class={styles.title} id="videos">
+                {t("tagPage.title.videos")}
+              </h2>
+              <VideoList entries={videos} />
+            </section>
+          )
+        }
+      </div>
     </Container>
-  </section>
+  </div>
 </PageLayout>

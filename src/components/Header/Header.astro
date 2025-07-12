@@ -10,7 +10,10 @@ const { currentLocale = "en", url } = Astro;
 
 const t = useTranslations(currentLocale as Language);
 
-const links = [{ href: "/articles", text: t("nav.articles") }];
+const links = [
+  { href: "/videos", text: t("nav.videos") },
+  { href: "/articles", text: t("nav.articles") },
+];
 ---
 
 <header class={styles.header}>

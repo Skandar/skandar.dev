@@ -1,5 +1,5 @@
 ---
-import { getCollection } from "astro:content";
+import { getCollection, type CollectionEntry } from "astro:content";
 
 import PageLayout from "~/layouts/Page/Page.astro";
 import Container from "~/components/Container/Container.astro";
@@ -9,11 +9,23 @@ import ArticleList from "~/components/ArticleList/ArticleList.astro";
 import { DEFAULT_LANG, type Language } from "~/i18n/ui";
 import { useTranslations } from "~/i18n/utils";
 import { styles } from "./Main.css";
+import VideoList from "~/components/VideoList/VideoList.astro";
 
 const { currentLocale = DEFAULT_LANG } = Astro;
 const t = useTranslations(currentLocale as Language);
 
-const articles = await getCollection("articles", ({ data, slug }) =>
+const articles: CollectionEntry<"articles">[] = await getCollection(
+  "articles",
+  ({ data, slug }) =>
+    getCollectionFilter({
+      lang: currentLocale,
+      slug,
+      isDev: import.meta.env.DEV,
+      draft: data.draft,
+    }),
+);
+
+const videos = await getCollection("videos", ({ data, slug }) =>
   getCollectionFilter({
     lang: currentLocale,
     slug,
@@ -22,7 +34,8 @@ const articles = await getCollection("articles", ({ data, slug }) =>
   }),
 );
 
-const lastArticles = getNLastArticles(articles, 10);
+const lastArticles = getNLastArticles<"articles">(articles, 10);
+const lastVideos = getNLastArticles<"videos">(videos, 10);
 ---
 
 <PageLayout>
@@ -41,6 +54,19 @@ const lastArticles = getNLastArticles(articles, 10);
       </h1>
     </Container>
   </section>
+
+  {
+    articles.length > 0 && (
+      <section>
+        <Container>
+          <h2 class={styles.articlesTitle} id="last-videos">
+            {t("home.last-videos.title")}
+          </h2>
+          <VideoList entries={lastVideos} />
+        </Container>
+      </section>
+    )
+  }
 
   {
     articles.length > 0 && (

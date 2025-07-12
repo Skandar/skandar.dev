@@ -7,8 +7,4 @@ type Props = HTMLAttributes<"a"> & {
 const { external, ...restProps } = Astro.props;
 ---
 
-<a
-  target={external ? "_blank" : undefined}
-  rel={external ? "nonoopener noreferrer" : undefined}
-  {...restProps}><slot /></a
->
+<a target={external ? "_blank" : undefined} {...restProps}><slot /></a>

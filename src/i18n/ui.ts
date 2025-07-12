@@ -35,12 +35,17 @@ export const ui = {
 
     "nav.home": "Home",
     "nav.articles": "Articles",
+    "nav.videos": "Videos",
 
+    "home.last-videos.title": "Last videos",
     "home.last-articles.title": "Last articles",
 
     "articles.title": "Articles",
+    "videos.title": "Videos",
     "tags.title": "Tags",
-    "tagPage.title": "Articles with tag",
+    "tagPage.title.main": "Content with tag",
+    "tagPage.title.articles": "Articles",
+    "tagPage.title.videos": "Videos",
 
     "footer.language": "Language",
 
@@ -80,12 +85,17 @@ export const ui = {
 
     "nav.home": "Главная",
     "nav.articles": "Статьи",
+    "nav.videos": "Видео",
 
+    "home.last-videos.title": "Последние видео",
     "home.last-articles.title": "Последние статьи",
 
     "articles.title": "Статьи",
+    "videos.title": "Видео",
     "tags.title": "Теги",
-    "tagPage.title": "Статьи по тегу",
+    "tagPage.title.main": "Контент по тегу",
+    "tagPage.title.articles": "Статьи",
+    "tagPage.title.videos": "Видео",
 
     "footer.language": "Язык",
 
@@ -125,12 +135,17 @@ export const ui = {
 
     "nav.home": "Головна",
     "nav.articles": "Статті",
+    "nav.videos": "Відео",
 
+    "home.last-videos.title": "Останні відео",
     "home.last-articles.title": "Останні статті",
 
     "articles.title": "Статті",
+    "videos.title": "Відео",
     "tags.title": "Теги",
-    "tagPage.title": "Статті за тегом",
+    "tagPage.title.main": "Контент за тегом",
+    "tagPage.title.articles": "Статті",
+    "tagPage.title.videos": "Відео",
 
     "footer.language": "Мова",
 
@@ -170,12 +185,17 @@ export const ui = {
 
     "nav.home": "Acasă",
     "nav.articles": "Articole",
+    "nav.videos": "Video-uri",
 
+    "home.last-videos.title": "Ultimele video-uri",
     "home.last-articles.title": "Ultimele articole",
 
     "articles.title": "Articole",
+    "videos.title": "Video-uri",
     "tags.title": "Tags",
-    "tagPage.title": "Articole cu tag-ul",
+    "tagPage.title.main": "Contentul cu tag-ul",
+    "tagPage.title.articles": "Articole",
+    "tagPage.title.videos": "Video-uri",
 
     "footer.language": "Limbă",
 

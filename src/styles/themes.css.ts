@@ -17,6 +17,7 @@ export const themeContract = createThemeContract({
     background: null,
     foreground: null,
     border: null,
+    danger: null,
   },
 });
 
@@ -28,6 +29,7 @@ export const darkThemeColors = {
     background: colors.black,
     foreground: colors.darkGray,
     border: colors.white,
+    danger: colors.red,
   },
 };
 
@@ -39,6 +41,7 @@ export const lightThemeColors = {
     background: colors.white,
     foreground: colors.lightGray,
     border: colors.black,
+    danger: colors.red,
   },
 };
 

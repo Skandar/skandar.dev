@@ -14,9 +14,23 @@ const schema = z.object({
   draft: z.boolean().optional(),
 });
 
+const videoSchema = schema.extend({
+  videoUrl: z.string(),
+  videoCoverUrl: z.string(),
+  videoCoverAlt: z.string(),
+});
+
 const articleCollection = defineCollection({
   type: "content",
   schema,
 });
 
-export const collections = { articles: articleCollection };
+const videoCollection = defineCollection({
+  type: "content",
+  schema: videoSchema,
+});
+
+export const collections = {
+  articles: articleCollection,
+  videos: videoCollection,
+};

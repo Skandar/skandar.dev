@@ -2,10 +2,10 @@
 import type { InferGetStaticPropsType } from "astro";
 import { getLocalizedUrl } from "~/utils/getLocalizedPath";
 import { getPathWithoutLocale } from "~/utils/getPathWithoutLocale";
-import type { getStaticPaths } from "~/pages/articles/[slug].astro";
+import type { getStaticPaths } from "~/pages/videos/[slug].astro";
 import { DEFAULT_LANG } from "~/i18n/ui";
-import ArticleEntry from "../ArticleEntry/ArticleEntry.astro";
-import { styles } from "./ArticleList.css";
+import VideoEntry from "../VideoEntry/VideoEntry.astro";
+import { styles } from "./VideoList.css";
 
 interface Props {
   entries: Array<InferGetStaticPropsType<typeof getStaticPaths>>;
@@ -19,7 +19,7 @@ const { entries } = Astro.props;
   {
     entries.map((entry) => (
       <div class={styles.item}>
-        <ArticleEntry
+        <VideoEntry
           title={entry.data.title}
           titleLevel={3}
           href={getLocalizedUrl(
@@ -27,6 +27,8 @@ const { entries } = Astro.props;
             `/${entry.collection}/${getPathWithoutLocale(entry.slug)}`,
           )}
           description={entry.data.description}
+          videoCoverUrl={entry.data.videoCoverUrl}
+          videoCoverAlt={entry.data.videoCoverAlt || ""}
         />
       </div>
     ))
