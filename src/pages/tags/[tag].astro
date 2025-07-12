@@ -27,8 +27,8 @@ export async function getStaticPaths() {
   );
 
   // sort by date
-  const articles = getNLastArticles(articleCollection, Infinity);
-  const videos = getNLastArticles(videoCollection, Infinity);
+  const articles = getNLastArticles<"articles">(articleCollection, Infinity);
+  const videos = getNLastArticles<"videos">(videoCollection, Infinity);
 
   const allContent = [...articles, ...videos];
 
@@ -42,7 +42,11 @@ export async function getStaticPaths() {
           acc[tag] = { articles: [], videos: [] };
         }
 
-        acc[tag][collection].push(item);
+        if (collection === "articles") {
+          acc[tag].articles.push(item);
+        } else if (collection === "videos") {
+          acc[tag].videos.push(item);
+        }
       }
 
       return acc;
