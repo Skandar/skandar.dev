@@ -8,7 +8,16 @@ import TagPage from "~/layouts/TagPage/TagPage.astro";
 export async function getStaticPaths() {
   const isDev = import.meta.env.DEV;
 
-  const articleColection = await getCollection("articles", ({ data, slug }) =>
+  const articleCollection = await getCollection("articles", ({ data, slug }) =>
+    getCollectionFilter({
+      lang: "ru",
+      slug,
+      isDev,
+      draft: data.draft,
+    }),
+  );
+
+  const videoCollection = await getCollection("videos", ({ data, slug }) =>
     getCollectionFilter({
       lang: "ru",
       slug,
@@ -18,30 +27,44 @@ export async function getStaticPaths() {
   );
 
   // sort by date
-  const lastArticles = getNLastArticles(articleColection, Infinity);
+  const articles = getNLastArticles<"articles">(articleCollection, Infinity);
+  const videos = getNLastArticles<"videos">(videoCollection, Infinity);
 
-  const tagMap = lastArticles.reduce(
-    (acc, article) => {
-      const tags = article.data.tags || [];
+  const allContent = [...articles, ...videos];
+
+  const tagMap = allContent.reduce(
+    (acc, item) => {
+      const tags = item.data.tags || [];
+      const collection = item.collection;
 
       for (const tag of tags) {
-        if (acc[tag]) {
-          acc[tag].push(article);
-        } else {
-          acc[tag] = [article];
+        if (!acc[tag]) {
+          acc[tag] = { articles: [], videos: [] };
+        }
+
+        if (collection === "articles") {
+          acc[tag].articles.push(item);
+        } else if (collection === "videos") {
+          acc[tag].videos.push(item);
         }
       }
 
       return acc;
     },
-    {} as Record<string, typeof articleColection>,
+    {} as Record<
+      string,
+      {
+        articles: typeof articles;
+        videos: typeof videos;
+      }
+    >,
   );
 
   return Object.entries(tagMap).map(([tag, entries]) => ({
     params: {
       tag: tag.split(" ").join("-").toLowerCase(),
     },
-    props: { entries, tag },
+    props: { articles: entries.articles, videos: entries.videos, tag },
   }));
 }
 ---

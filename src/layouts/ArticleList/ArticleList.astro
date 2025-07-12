@@ -23,7 +23,7 @@ const entries = await getCollection("articles", ({ data, slug }) =>
   }),
 );
 
-const sortedEntries = getNLastArticles(entries, Infinity);
+const sortedEntries = getNLastArticles<"articles">(entries, Infinity);
 
 const t = useTranslations(currentLocale as Language);
 ---
