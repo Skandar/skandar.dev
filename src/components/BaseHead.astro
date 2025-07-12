@@ -8,6 +8,7 @@ import { useTranslations } from "~/i18n/utils";
 import { DEFAULT_LANG, languages, locales, type Language } from "~/i18n/ui";
 import "~/styles/global.css";
 import { getLocalizedUrl } from "~/utils/getLocalizedPath";
+import GoogleAnalytics from "./GoogleAnalytics.astro";
 
 type Props = Partial<CollectionEntry<"articles">["data"]>;
 
@@ -180,3 +181,5 @@ const title = formatTitle(rawTitle);
 <meta property="twitter:description" content={description} />
 <meta property="twitter:image" content={ogImageUrl} />
 <meta property="twitter:image:alt" content={ogImageAlt} />
+
+<GoogleAnalytics />
