@@ -19,6 +19,7 @@ const common = {
   "subscribe.github": "GitHub",
   "subscribe.linkedin": "LinkedIn",
   "subscribe.bluesky": "Bluesky",
+  "subscribe.youtube": "YouTube",
   "subscribe.telegram.title": "Telegram",
   "subscribe.telegram.url": "https://t.me/skandar_dev",
   "meta.site": "skandar.dev",
