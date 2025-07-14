@@ -1,6 +1,7 @@
 import { globalStyle, style } from "@vanilla-extract/css";
-import { tokens } from "~/styles/themes.css";
-import { breakpoints } from "~/styles/tokens";
+
+import { tokens } from "../../styles/themes.css";
+import { breakpoints } from "../../styles/tokens";
 
 const body = style({
   display: "grid",

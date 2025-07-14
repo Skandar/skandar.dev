@@ -1,5 +1,6 @@
 import { style } from "@vanilla-extract/css";
-import { tokens } from "src/styles/themes.css";
+
+import { tokens } from "../../styles/themes.css";
 
 export const link = style({
   color: "inherit",

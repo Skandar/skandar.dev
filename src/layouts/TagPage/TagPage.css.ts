@@ -1,6 +1,6 @@
 import { style } from "@vanilla-extract/css";
 
-import { tokens } from "~/styles/themes.css";
+import { tokens } from "../../styles/themes.css";
 
 const root = style({
   flexGrow: 1,

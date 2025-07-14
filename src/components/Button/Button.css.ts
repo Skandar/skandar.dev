@@ -1,6 +1,6 @@
 import { style, styleVariants } from "@vanilla-extract/css";
 
-import { tokens } from "~/styles/themes.css";
+import { tokens } from "../../styles/themes.css";
 
 const button = style({
   display: "inline-flex",

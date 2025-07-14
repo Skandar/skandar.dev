@@ -1,6 +1,7 @@
 import { style } from "@vanilla-extract/css";
 import { calc } from "@vanilla-extract/css-utils";
-import { tokens } from "src/styles/themes.css";
+
+import { tokens } from "../../styles/themes.css";
 
 const header = style({
   paddingBlockEnd: tokens.spaces[64],

@@ -8,7 +8,7 @@ ogImage: "/images/object-mutation-debugging/ru.jpg"
 ---
 
 import ChromeScreenshot from "~/images/object-mutation-debugging/devtools-debugging.png";
-import { breakpoints } from "~/styles/tokens";
+import { breakpoints } from "../../../styles/tokens";
 
 Există o opinie larg răspândită că mutarea obiectelor este o practică proastă. Unul dintre motivele acestei opinii este comportamentul imprevizibil care duce la bug-uri greu de detectat. Să vedem cum putem simplifica găsirea mutațiilor, dar mai întâi trebuie să înțelegem ce este mutația și care sunt avantajele și dezavantajele mutării unui obiect.
 
@@ -90,7 +90,6 @@ debugger;
 
 Dacă obiectele nu diferă vizual, înseamnă că probabil mutația este undeva mai departe.
 
-
 <Callout variant="info">
 **Particularități ale funcționării `console.log()` în browser**
 
@@ -130,10 +129,27 @@ Adăugăm `debugger` sau un punct de întrerupere, deschidem DevTools din browse
 
 `Proxy` ne permite să adăugăm „capcane” (traps) care sunt apelate la diferite acțiuni asupra obiectelor (la apelarea metodelor interne). Exact ceea ce avem nevoie pentru a găsi unde are loc mutația. Ne interesează următoarele „capcane”:
 
-
-- <Link external href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy/Proxy/set">set()</Link> – este apelată la atribuirea unei valori unei proprietăți;
-- <Link external href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy/Proxy/deleteProperty">deleteProperty()</Link>– este apelată la ștergerea unei proprietăți;
-- <Link external href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy/Proxy/defineProperty">defineProperty()</Link> – este apelată la crearea unei noi proprietăți.
+- <Link
+    external
+    href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy/Proxy/set"
+  >
+    set()
+  </Link>
+  – este apelată la atribuirea unei valori unei proprietăți;
+- <Link
+    external
+    href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy/Proxy/deleteProperty"
+  >
+    deleteProperty()
+  </Link>
+  – este apelată la ștergerea unei proprietăți;
+- <Link
+    external
+    href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy/Proxy/defineProperty"
+  >
+    defineProperty()
+  </Link>
+  – este apelată la crearea unei noi proprietăți.
 
 Creăm un `Proxy` cu aceste capcane și în fiecare dintre ele adăugăm `debugger`, astfel încât la depanare în DevTools, după ieșirea din codul Proxy, să vedem unde are loc mutația. Un exemplu de cum se poate implementa este prezentat mai jos:
 
@@ -206,7 +222,8 @@ Putem oferi codul unui AI și în prompt să îi cerem să găsească toate locu
 În Github Copilot Chat din VSCode există posibilitatea de a specifica ca acesta să execute promptul pe toate fișierele din workspace; pentru aceasta, la începutul promptului trebuie să folosim extensia `@workspace`.
 
 <Callout variant="warning">
-Înainte de a folosi AI pentru analiza codului de lucru, asigură-te că compania la care lucrezi permite acest lucru.
+  Înainte de a folosi AI pentru analiza codului de lucru, asigură-te că compania
+  la care lucrezi permite acest lucru.
 </Callout>
 
 ## Cum putem evita mutațiile
@@ -224,5 +241,3 @@ Iată câteva idei despre cum putem evita mutațiile:
   Înainte de utilizare, verifică dacă suportul browserelor îți este adecvat.
 
 - Utilizează structuri de date imutabile din biblioteci sau creează-le pe ale tale folosind `Object.freeze()`, descriptorul proprietății `writable: false` (poate fi setat folosind `Object.defineProperty()`) sau un descriptor set care nu va atribui o nouă valoare proprietății.
-
-
