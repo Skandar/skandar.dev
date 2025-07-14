@@ -8,7 +8,7 @@ ogImage: "/images/object-mutation-debugging/ru.jpg"
 ---
 
 import ChromeScreenshot from "~/images/object-mutation-debugging/devtools-debugging.png";
-import { breakpoints } from "~/styles/tokens";
+import { breakpoints } from "../../../styles/tokens";
 
 Есть распространённое мнение, что мутировать объекты — это плохая практика. Одна из причин такого мнения — непредсказуемое поведение, приводящее к багам, которые сложно обнаружить. Давай разберёмся, как нам упростить поиск мутаций, но для начала нам нужно понять, что вообще такое мутация и какие есть плюсы и минусы в мутации объекта.
 
@@ -129,9 +129,27 @@ debugger;
 
 `Proxy` позволяет добавить «ловушки» (traps), которые вызываются при разных действиях над объектами (при вызове внутренних методов). Это как раз то, что нужно для того, чтобы найти, где происходит мутация. Нас интересуют такие «ловушки»:
 
-- <Link external href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy/Proxy/set">set()</Link> - вызывается при задании значения свойству;
-- <Link external href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy/Proxy/deleteProperty">deleteProperty()</Link>- вызывается при удалении свойства;
-- <Link external href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy/Proxy/defineProperty">defineProperty()</Link> - вызывается при создании нового свойства.
+- <Link
+    external
+    href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy/Proxy/set"
+  >
+    set()
+  </Link>
+  - вызывается при задании значения свойству;
+- <Link
+    external
+    href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy/Proxy/deleteProperty"
+  >
+    deleteProperty()
+  </Link>
+  - вызывается при удалении свойства;
+- <Link
+    external
+    href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy/Proxy/defineProperty"
+  >
+    defineProperty()
+  </Link>
+  - вызывается при создании нового свойства.
 
 Создаём `Proxy` с этими ловушками и в каждую из них добавляем `debugger`, для того что при отладке в DevTools после выхода из кода Proxy мы увидели, где происходит мутация. Пример как это можно реализовать представлен ниже:
 
@@ -204,7 +222,8 @@ const proxy = createDeepProxy(person);
 В Github Copilot Chat в VSCode есть возможность указать чтобы он выполнял промт по всем файлам воркспейса, для этого в начале промпта нужно использовать расширение `@workspace`.
 
 <Callout variant="warning">
-Перед тем как использовать AI для анализа рабочего кода убедись что в компании в которой ты работаешь разрешено это делать.
+  Перед тем как использовать AI для анализа рабочего кода убедись что в компании
+  в которой ты работаешь разрешено это делать.
 </Callout>
 
 ## Как можно избежать мутаций
@@ -215,7 +234,6 @@ const proxy = createDeepProxy(person);
 - использовать TypeScript для строгой типизации и выявления возможных мутаций на этапе компиляции;
 - ввести в команде конвенцию когда допустимо мутировать, а когда нет. Например, никогда не мутировать объекты, которые приходят в параметрах функции, или пропсах для React компонентов.
 - вместо мутирующих методов использовать не мутирующие аналоги:
-
   - `sort()` → `toSorted()`
   - `reverse()` → `toReversed()`
   - `splice()` → `toSpliced()`

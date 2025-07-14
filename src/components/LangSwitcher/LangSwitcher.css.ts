@@ -1,6 +1,6 @@
 import { style } from "@vanilla-extract/css";
 
-import { breakpoints } from "~/styles/tokens";
+import { breakpoints } from "../../styles/tokens";
 import { tokens } from "../../styles/themes.css";
 
 const title = style({

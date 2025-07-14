@@ -8,7 +8,7 @@ ogImage: "/images/object-mutation-debugging/en.jpg"
 ---
 
 import ChromeScreenshot from "~/images/object-mutation-debugging/devtools-debugging.png";
-import { breakpoints } from "~/styles/tokens";
+import { breakpoints } from "../../../styles/tokens";
 
 There is a common belief that mutating objects is bad practice. One reason for this opinion is the unpredictable behavior it can lead to, resulting in bugs that are hard to detect. Let's explore how we can simplify the process of finding mutations, but first, we need to understand what "mutation" actually is and what are the pros and cons of mutating an object.
 
@@ -128,9 +128,27 @@ We add a `debugger` statement or a breakpoint, go to the browser's DevTools, and
 
 Proxy allows us to add "traps" that are called during various operations on objects (when internal methods are invoked). This is precisely what we need to find where the mutation occurs. We are interested in the following traps:
 
-- <Link external href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy/Proxy/set">set()</Link> - called when setting a property's value.
-- <Link external href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy/Proxy/deleteProperty">deleteProperty()</Link>- called when deleting a property.
-- <Link external href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy/Proxy/defineProperty">defineProperty()</Link> - called when defining a new property.
+- <Link
+    external
+    href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy/Proxy/set"
+  >
+    set()
+  </Link>
+  - called when setting a property's value.
+- <Link
+    external
+    href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy/Proxy/deleteProperty"
+  >
+    deleteProperty()
+  </Link>
+  - called when deleting a property.
+- <Link
+    external
+    href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy/Proxy/defineProperty"
+  >
+    defineProperty()
+  </Link>
+  - called when defining a new property.
 
 We create a Proxy with these traps and add a debugger statement in each, so that when debugging in DevTools, after exiting the `Proxy` code, we'll see where the mutation occurs. Here's an example of how this can be implemented:
 
@@ -203,7 +221,7 @@ We can feed the code to an AI and prompt it to find all the places where mutatio
 In GitHub Copilot Chat in VSCode, there's an option to instruct it to execute the prompt across all workspace files. To do this, you start the prompt with the `@workspace` extension.
 
 <Callout variant="warning">
-Before using AI to analyze work code, make sure that your company allows it.
+  Before using AI to analyze work code, make sure that your company allows it.
 </Callout>
 
 ## How to avoid mutations
@@ -214,7 +232,6 @@ Here are some thoughts on how to avoid mutations:
 - Use TypeScript for strict typing and to identify potential mutations at compile time.
 - Establish a team convention on when mutation is acceptable and when it's not. For example, never mutate objects that come in as function parameters or props for React components.
 - Instead of mutating methods, use non-mutating alternatives:
-
   - `sort()` → `toSorted()`
   - `reverse()` → `toReversed()`
   - `splice()` → `toSpliced()`

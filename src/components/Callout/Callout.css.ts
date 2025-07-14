@@ -1,7 +1,8 @@
 import { style, styleVariants } from "@vanilla-extract/css";
 import { calc } from "@vanilla-extract/css-utils";
-import { tokens } from "~/styles/themes.css";
-import { breakpoints } from "~/styles/tokens";
+
+import { tokens } from "../../styles/themes.css";
+import { breakpoints } from "../../styles/tokens";
 
 const callout = style({
   position: "relative",

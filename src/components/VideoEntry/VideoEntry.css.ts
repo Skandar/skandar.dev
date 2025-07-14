@@ -1,6 +1,7 @@
 import { style } from "@vanilla-extract/css";
-import { tokens } from "src/styles/themes.css";
-import { breakpoints } from "~/styles/tokens";
+
+import { tokens } from "../../styles/themes.css";
+import { breakpoints } from "../../styles/tokens";
 
 export const entry = style({});
 
