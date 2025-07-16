@@ -42,7 +42,13 @@ const buttons = [
 </section>
 
 <script is:inline>
-  const theme = localStorage.getItem("theme") || "system";
+  let theme = "system";
+
+  try {
+    theme = localStorage.getItem("theme") || "system";
+  } catch (error) {
+    console.error("Failed to read theme from localStorage:", error);
+  }
 
   document.documentElement.setAttribute("data-theme", theme);
 
@@ -62,19 +68,12 @@ const buttons = [
       button.classList.replace(filledButtonClass, outlineButtonClass);
     }
   });
-</script>
 
-<script>
-  const themeSwitcher = document.getElementById("theme-switcher")!;
-  const filledButtonClass = themeSwitcher.dataset.filledClass!;
-  const outlineButtonClass = themeSwitcher.dataset.outlineClass!;
-
-  themeSwitcher.addEventListener("click", (event: MouseEvent) => {
-    const target = event.target as HTMLButtonElement;
-    const activeTheme = target.getAttribute("value")!;
+  themeSwitcher.addEventListener("click", ({ target }) => {
+    const activeTheme = target.getAttribute("value");
 
     const buttons = document
-      .getElementById("theme-switcher")!
+      .getElementById("theme-switcher")
       .querySelectorAll("button");
 
     buttons.forEach((button) => {
@@ -89,6 +88,10 @@ const buttons = [
 
     document.documentElement.setAttribute("data-theme", activeTheme);
 
-    localStorage.setItem("theme", activeTheme);
+    try {
+      localStorage.setItem("theme", activeTheme);
+    } catch (error) {
+      console.error("Failed to save theme to localStorage:", error);
+    }
   });
 </script>
