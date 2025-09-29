@@ -1,0 +1,257 @@
+---
+title: "Chrome Debugger: The Tool You Shouldn’t Ignore"
+description: "We usually debug with console.log, but when things get complex, console.log alone is not enough. In those moments, we need to slow down, go through the code step by step, and see what is really happening. The debugger can help us with that."
+publishedTime: "Sep 30 2025"
+modifiedTime: "Sep 30 2025"
+tags: ["JS", "Chrome", "Debugging", "DevTools"]
+ogImage: "/images/chrome-debugger/en.png"
+ogImageAlt: "I’m pointing at the Chrome debugger’s navigation panel, with the text “Don’t ignore Chrome Debugger” around my hand."
+videoUrl: "https://youtu.be/gjvJ35iiYF4"
+videoCoverUrl: "/images/chrome-debugger/en.png"
+videoCoverAlt: "I’m pointing at the Chrome debugger’s navigation panel, with the text “Don’t ignore Chrome Debugger” around my hand."
+---
+
+We usually debug with `console.log`. I’ll be honest: I use `console.log` 99% of the time. But when things get too complex, `console.log` alone is not enough. In those moments, we need to slow down, go through the code step by step, and see what is really happening, and debugger can help us with that.
+
+## What is a Debugger and Why Do We Need It?
+
+A debugger is a tool that lets you stop JavaScript execution at a specific line of code. With debugger controls, you can run the code line by line and see what happens after each step.
+
+To open the debugger, go to the Sources panel in DevTools.
+
+This panel has 3 parts:
+
+- On the left, there is the Page tab with the file tree. These are all the files loaded with the app.
+- In the center, you have the code editor. Here you see the content of the selected file.
+- On the right, you find everything related to the debugger. We’ll check it later.
+
+The first way to start the debugger is to add the `debugger` statement in your code at the line where you want JavaScript to stop.
+
+Let’s add it to the code and run the debugger.
+
+The debugger has started, the script stopped, and you can see an overlay on the page with two buttons:
+
+- The first one continues running the script.
+- The second one skips the next function call.
+
+These are the most common navigation controls, so they are placed on the overlay.
+
+The full list of controls is at the top of the panel. Let’s see what each button does.
+
+## Navigation
+
+The first button continues running the script. If there’s a breakpoint while running, the debugger will stop at that line. A breakpoint is a line or a place in the code where we tell the debugger to stop. One type of breakpoint is the `debugger` statement we already used. We’ll look at other types of breakpoints a bit later.
+
+If you hold the left mouse button, you’ll see two hidden buttons.
+
+The Play button continues the script but disables all breakpoints for 500 ms.
+
+This is useful when you have many breakpoints and want to run the script without stopping at each one.
+
+The Stop button exits the debugger without continuing the script. Use it when you know that the script will change the app, but you don’t want to roll things back later.
+
+For example, the code might add a flag to LocalStorage, but for debugging you need the app without this flag. Normally, every time the script finishes, you’d need to delete that flag manually. To avoid this, you can stop the script before it runs to the end - the code that adds the flag won’t execute.
+
+The next button, Step over next function call, runs the code on the current line. If it’s a function call, the debugger won’t go inside the function, it will just move to the next line. We’ve already seen this button on the debugger overlay.
+
+The Step button is similar, but if the current line is a function call, the debugger will go inside and stop at the first line of that function.
+
+For async code, use the Step into button. It works like Step button, but also goes inside async functions. This is useful when debugging `setTimeout`, promises, or message passing between a worker and the main thread.
+
+The last button is Step out of current function. It takes the debugger out of the current function. This is handy when there’s nothing left to debug inside and you want to exit the function right away.
+
+We’ll talk more about this button a bit later.
+
+## Code Editor
+
+While the script is paused, the debugger shows values of variables, expressions, and functions.
+
+You can see these values on the right side of the code or by hovering over a variable. If this distracts you, you can turn it off in DevTools settings. Go to Settings → Sources and uncheck “Display variable values inline while debugging.”
+
+What’s interesting is that all these variables and functions are also available in the console. For example, you can log the `buttons` variable in the console and use it just like any other variable defined there.
+
+During debugging, you often need to change code - and you can do it right in the browser. Right-click anywhere in the code editor and choose “Override content.” This creates a copy of the file where you can make changes. The browser will use your copy instead of the original. To make it work, you need to pick a folder for saving overridden files.
+
+Let’s add `console.log('This file is overridden');`, save the file, and reload the page. The new `console.log` runs, and you can see the message in the console.
+
+This can really speed up debugging when you need to make a lot of small changes without switching back to your code editor all the time. You can override both local files and production files.
+
+In Chrome, you can also edit original source files directly. To do this, open the Workspace tab in the left panel, select your project folder, and choose the file you want to edit.
+
+Let’s add `console.log('Changes made in Workspace');`, save it, and reload the page. As you can see, the message appeared in the console - which means the changes were applied. Let’s open VS Code and check if the source files were updated. As we can see, the modification we made has been saved in the source files.
+
+But the most comfortable way is to debug and edit code right inside your editor. That’s a topic for another video. If you’d like to see how I use the debugger in VS Code, let me know in the comments and I’ll make a video about it.
+
+## Watch
+
+In the Watch section, you can add any valid JavaScript expression, and it will be evaluated while debugging. This way, you can see the result of expressions without using `console.log`, and track how their values change as the code runs.
+
+It works similar to Live Expressions in the console.
+
+Let’s add the variable `buttons` and start the debugger. Right now, `buttons` is not available because it’s declared later in the code. When the debugger reaches the line where the variable is defined, the watched value will be updated.
+
+## Scope
+
+The Scope section shows all the scopes available at the current debugger position and the variables inside them.
+
+For example, right now there are:
+
+- **2 block scopes:**
+  - The first one is created inside the `catch` block, and it has only the variable `blockVarInCatchBlock`.
+  - The second one is created by the `if` block and contains the variable `blockVar`.
+- Between them is a special scope created by the `error` variable inside the `catch`. Chrome makes a separate scope for it.
+- Next is the local scope, created by the function `createLocalScope`, which is where the debugger is paused now.
+- The module scope is formed inside an ES module - a file that imports or exports something.
+- Then comes the script scope. It includes all variables defined at the top level of inline scripts or linked scripts. Variables defined in a module won’t be available here. Right now, you can see variables from another script on the page.
+- The last one is always the global scope, with all the properties of the global object. Depending on the platform, this global object is different: in the browser it’s `Window`, in a `Worker` it’s `WorkerGlobalScope`, in a Service Worker it’s `ServiceWorkerGlobalScope`, and in NodeJS it’s `Global`.
+
+## Breakpoints
+
+In the Breakpoints section, you’ll see two checkboxes - we’ll talk about them a bit later.
+
+Below them, the list is empty for now, but once you add breakpoints, they will appear here. Let’s add the first one. To do this, click on the line number in the code editor where you want to stop execution. This breakpoint works the same as if you had added the `debugger` statement on that line.
+
+Now you can see it in the list of active breakpoints. By clicking the checkbox, you can disable it. By clicking the breakpoint text, you’ll jump to the line where it was set.
+
+To remove a breakpoint, click the breakpoint icon next to the line number.
+
+If you right-click on a line number, you’ll see a context menu with two more breakpoint types:
+
+- Conditional breakpoint
+- Logpoint
+
+Let’s add them.
+
+## Conditional Breakpoint
+
+A conditional breakpoint stops JavaScript execution only if the condition you set equals `true`. The condition can be any valid expression.
+
+For example, I added two conditional breakpoints. In the first one, the condition is `true`, and in the second one, the condition is `false`. As a result, the code stops at the first breakpoint but does not stop at the second.
+
+## Logpoint
+
+A logpoint prints the result of an expression to the console.
+
+For example, you can log the value of the `buttons` variable.
+
+A logpoint does not stop execution - it just shows a message in the console. It works like `console.log`, but to make it clear, messages from logpoints have a small logpoint icon in the console.
+
+The main advantage over `console.log` is that you don’t need to edit your code to add it. That means you don't to rebuild the app. It’s faster, and you can add logpoints to any script right in the browser, even in production.
+
+Each type of breakpoint has its own color. Conditional breakpoints and logpoints have colored labels in the breakpoints list, so you can easily recognise them.
+
+Sometimes, when you add a breakpoint, you may see an empty breakpoint marker on that line. This means you can add another breakpoint there. Just right-click on the marker and choose the type of breakpoint you want.
+
+## On Exceptions
+
+Let’s go back to the two checkboxes at the top of the Breakpoints section. They stop script execution when errors or rejected promises happen.
+
+- Pause on uncaught exceptions starts the debugger on every unhandled exception. This helped me when a JSON request returned an empty string or HTML, and parsing the response threw an error. It’s also useful for debugging exceptions inside third-party libraries.
+- Pause on caught exceptions starts the debugger on the line where the exception is thrown and will be caught. This can help you find places where errors were handled incorrectly - for example, just hidden so they don’t clutter the console. Since the debugger stops on _every_ handled exception, it can get noisy. Later, I’ll show how to deal with that.
+
+These breakpoints not only show the exact line but also the conditions under which the exception happened. You don’t need to guess variable values - the debugger stops right at the moment of the error, with everything you need visible on screen.
+
+## XHR/fetch
+
+In the XHR/fetch breakpoints section, you can add breakpoints for network requests. When creating one, you set a string, and if that string appears in the URL of a request, the debugger will pause at the line where the request is made.
+
+For example, you can stop the debugger on every request to Google Analytics. Just enter the string `"google"` in the breakpoint and reload the page.
+
+This type of breakpoint makes it easy to find the exact place in the code where a request with specific query parameters is made.
+
+## DOM Breakpoints
+
+The next type of breakpoints is DOM breakpoints. They start the debugger when something in the DOM changes. To add one, open the Elements panel, right-click an element, choose Break on, and then pick the type of breakpoint you need:
+
+- Subtree modifications - triggered when there are changes in a child element, such as text, structure, or the order of elements. However, it does not trigger when a child element is removed.
+  Let’s add it to an element and change the text inside a child element. Using `$0`, we can get a reference to the selected element and set a new value to its property `textContent`.
+- Attribute modification - triggers when an element’s attributes are changed. For example, when switching themes, the `html` element gets a data-attribute update. To find where this happens, let's add an attribute modification breakpoint to `html` element and switch the theme. The debugger will pause at the right line.
+- Node removal - triggers when an element is removed. Let’s add it to the theme switch button and then uncomment the code that removes it. The debugger will stop at that line. If the breakpoint doesn’t work, try reopening DevTools and adding it again.
+
+All DOM breakpoints are listed in the DOM breakpoints tab in the Elements panel or in the DOM breakpoints section of the Sources panel. When you click an element there, it opens it in the Elements panel.
+
+To remove a DOM breakpoint, just click it again in the same place where you added it. Or right-click it in the Sources panel and choose Remove breakpoint. You can also disable it with the checkbox next to it.
+
+Important note: DOM breakpoints only work for changes made by JavaScript. If you change elements manually in the Elements panel, they will not trigger.
+
+## Global Listeners
+
+The Global Listeners section shows all event listeners attached to the global object. In the browser, that’s the `window`.
+
+You can also check listeners another way - by running `getEventListeners(window)` in the console. This function works only in the Chrome console and won’t work if you call it from your code.
+
+## Event Listener Breakpoints
+
+Next, we have Event Listener breakpoints. Here you can choose specific events or groups of events that will trigger the debugger when their handler runs.
+
+For example, let’s select the click event and then press the theme switch button. The debugger stops at the first line of that button’s click handler.
+
+## CSP Violation Breakpoints
+
+Content Security Policy (CSP) Violation Breakpoints stop script execution when a security policy is violated. They help protect code from potential XSS (cross-site scripting) attacks.
+
+These breakpoints only work if CSP is configured in your project.
+
+## Function Breakpoint
+
+The last type of breakpoint is the **Function breakpoint**. It is added to the call of a specific function. To create one, run the `debug()` function in the console and pass in the function you want to track as an argument. This only works in the console - you can’t call it from your code.
+
+I’ve never really used this breakpoint in practice. If you have, share your experience in the comments - I’d love to hear about real use cases.
+
+## Ignoring Breakpoints and Scripts
+
+We’ve seen how to stop code execution using breakpoints. Now let’s look at how to:
+
+- disable all breakpoints when you don’t need them,
+- ignore scripts where you don’t want the debugger to stop,
+- and tell the debugger specific places where it should never pause.
+
+To disable all breakpoints, click the button with the crossed-out breakpoint icon in the navigation panel. This is useful when you have several breakpoints but want to run the script without stopping. Instead of turning off each breakpoint one by one, you can disable them all at once.
+
+If the debugger stops at lines you don’t care about, you can tell it to skip them. Right-click on the line you want to ignore and choose “Never pause here.” This adds a conditional breakpoint with the condition set to `false`.
+
+Remember the Pause on caught exceptions option we talked about, and how it can be noisy because it triggers too often? With Never pause here, you can ignore the extra triggers and reduce the noise.
+
+If you don’t want the debugger to stop inside a specific script at all, add it to the ignore list.
+
+Right-click anywhere in the code editor and select “Add script to ignore list.” You can edit the ignore list later in DevTools settings, in the Ignore List tab.
+
+Scripts in the ignore list are added as regular expressions, so you can edit them to ignore multiple scripts at once if needed.
+
+## Call Stack
+
+The Call Stack shows the functions that are currently running. The order tells you when they were called:
+
+- At the top is the most recent function (it will finish first).
+- At the bottom is the earliest one (it will finish last).
+
+On the left of each function name, you’ll see an arrow icon showing where the debugger is paused right now. On the right, you’ll see the file name and the line number where the debugger stopped inside that function.
+
+Clicking on a function moves the debugger into it.
+
+If you want to restart a function (not the whole script), right-click on it and choose Restart frame.
+
+Async functions, generators, or WebAssembly functions cannot be restarted this way.
+
+When debugging async code, the Call Stack shows text separators between functions. You can’t move the debugger into functions below those separators.
+
+## Threads
+
+The last section shows the list of threads in the application. Right now it’s hidden, because the app has only one thread - the main one. To see how this section works, let’s switch to an app with multiple threads. I have YouTube open in another tab, so let’s go there.
+
+Here we can see two active threads: Main and `sw.js` - the service worker thread. On the left of each thread, there’s an arrow icon showing where the debugger is currently paused. By clicking on a thread, you can move the debugger into it.
+
+Let’s pause the debugger inside the service worker. On the right of the thread name, you can now see the status paused, since we stopped it. The global object is now `ServiceWorkerGlobalScope`.
+
+## Continue to Here
+
+To quickly move the debugger to a specific line, right-click on the line number and choose “Continue to here.” The debugger will run until it reaches that line. If there are any breakpoints before it, the debugger will stop at the first one.
+
+There’s another way to speed this up.
+
+Hold Command on macOS (or Ctrl on Windows/Linux), and the code editor will highlight all places where you can move the debugger. Click on any highlighted spot, and the debugger will jump there. If there are breakpoints before that line, it will stop at the first one.
+
+## Ending
+
+I hope you enjoyed this video. If you did, you might also like my video about simple debugging tricks that can make your debugging easier.
+See you in the next video!
