@@ -27,6 +27,7 @@ const figure = style({
 
 const image = style({
   flexGrow: 0,
+  flexShrink: 0,
 
   "@media": {
     [`all and (min-width: ${breakpoints.sm})`]: {
