@@ -10,6 +10,18 @@ const { currentLocale = DEFAULT_LANG } = Astro;
 const t = useTranslations(currentLocale as Language);
 
 const subscriptions = {
+  youtube: {
+    link: t("subscribe.youtube.url"),
+    title: t("subscribe.youtube.title"),
+  },
+  linkedin: {
+    link: "https://www.linkedin.com/in/aleksandr-slugin/",
+    title: t("subscribe.linkedin"),
+  },
+  telegram: {
+    link: t("subscribe.telegram.url"),
+    title: t("subscribe.telegram.title"),
+  },
   rss: {
     link: removeTrailingSlash(
       new URL(`rss/${currentLocale}.xml`, Astro.site).toString(),
@@ -19,22 +31,6 @@ const subscriptions = {
   github: {
     link: "https://github.com/Skandar",
     title: t("subscribe.github"),
-  },
-  telegram: {
-    link: t("subscribe.telegram.url"),
-    title: t("subscribe.telegram.title"),
-  },
-  bluesky: {
-    link: "https://bsky.app/profile/skandar-dev.bsky.social",
-    title: t("subscribe.bluesky"),
-  },
-  linkedin: {
-    link: "https://www.linkedin.com/in/aleksandr-slugin/",
-    title: t("subscribe.linkedin"),
-  },
-  youtube: {
-    link: "https://youtube.com/@SkandarDev",
-    title: t("subscribe.youtube"),
   },
 };
 ---

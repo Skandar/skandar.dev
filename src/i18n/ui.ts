@@ -18,8 +18,7 @@ const common = {
   "subscribe.rss": "RSS",
   "subscribe.github": "GitHub",
   "subscribe.linkedin": "LinkedIn",
-  "subscribe.bluesky": "Bluesky",
-  "subscribe.youtube": "YouTube",
+  "subscribe.youtube.title": "YouTube",
   "subscribe.telegram.title": "Telegram",
   "subscribe.telegram.url": "https://t.me/skandar_dev",
   "meta.site": "skandar.dev",
@@ -63,6 +62,7 @@ export const ui = {
     "theme.system": "System",
 
     "subscribe.title": "Subscribe",
+    "subscribe.youtube.url": "https://youtube.com/@SkandarDev",
 
     "article.tags": "Tags",
     "article.publishedTime": "Published",
@@ -113,6 +113,7 @@ export const ui = {
     "theme.system": "Системная",
 
     "subscribe.title": "Подпишись",
+    "subscribe.youtube.url": "https://youtube.com/@skandar_dev",
 
     "article.tags": "Теги",
     "article.publishedTime": "Опубликовано",
@@ -163,6 +164,7 @@ export const ui = {
     "theme.system": "Системна",
 
     "subscribe.title": "Підпишись",
+    "subscribe.youtube.url": "https://youtube.com/@SkandarDev",
 
     "article.tags": "Теги",
     "article.publishedTime": "Опубліковано",
@@ -213,6 +215,7 @@ export const ui = {
     "theme.system": "Sistemului",
 
     "subscribe.title": "Abonează-te",
+    "subscribe.youtube.url": "https://youtube.com/@SkandarDev",
 
     "article.tags": "Tags",
     "article.publishedTime": "Publicat",
