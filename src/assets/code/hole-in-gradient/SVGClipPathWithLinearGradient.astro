@@ -49,12 +49,13 @@ import "./global.css";
 <script>
   import { getHoleData } from "./utils/getHoleData.js";
 
-  const fillElement = document.querySelector("#svgClipPathLinearGradient");
+  const fillElement = document.querySelector(
+    "#svgClipPathLinearGradient",
+  ) as HTMLElement;
 
-  function updateClipPath(el) {
-    const svg = el.querySelector("svg");
-    const clipPath = el.querySelector("clipPath path");
-
+  function updateClipPath(el: HTMLElement) {
+    const svg = el.querySelector("svg") as SVGSVGElement;
+    const clipPath = el.querySelector("clipPath path") as SVGPathElement;
     const width = el.clientWidth;
     const height = el.clientHeight;
 
@@ -82,7 +83,7 @@ import "./global.css";
         return;
       }
 
-      updateClipPath(entry.target);
+      updateClipPath(entry.target as HTMLElement);
     }
   });
   observer.observe(fillElement);

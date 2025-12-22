@@ -43,11 +43,13 @@ import "./global.css";
 <script>
   import { getHoleData } from "./utils/getHoleData.js";
 
-  const fillElement = document.querySelector(".scale__fill--svg-mask");
+  const fillElement = document.querySelector(
+    ".scale__fill--svg-mask",
+  ) as HTMLElement;
 
-  function updateMask(el) {
-    const svg = document.querySelector(".svg");
-    const circle = svg.querySelector(".maskCircle");
+  function updateMask(el: HTMLElement) {
+    const svg = document.querySelector(".svg") as SVGSVGElement;
+    const circle = svg.querySelector(".maskCircle") as SVGCircleElement;
 
     const width = el.clientWidth;
     const height = el.clientHeight;
@@ -56,7 +58,7 @@ import "./global.css";
 
     const { x: cx } = getHoleData(el);
 
-    circle.setAttribute("cx", cx);
+    circle.setAttribute("cx", cx.toString());
   }
 
   const observer = new ResizeObserver((entries) => {
@@ -65,7 +67,7 @@ import "./global.css";
         return;
       }
 
-      updateMask(entry.target);
+      updateMask(entry.target as HTMLElement);
     }
   });
   observer.observe(fillElement);

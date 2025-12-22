@@ -18,9 +18,9 @@ import "./global.css";
 <script>
   import { getHoleData } from "./utils/getHoleData.js";
 
-  const fillElement = document.querySelector("#clipPath");
+  const fillElement = document.querySelector("#clipPath") as HTMLElement;
 
-  function updateClipPath(el) {
+  function updateClipPath(el: HTMLElement) {
     const width = el.clientWidth;
     const height = el.clientHeight;
 
@@ -46,7 +46,7 @@ import "./global.css";
         return;
       }
 
-      updateClipPath(entry.target);
+      updateClipPath(entry.target as HTMLElement);
     }
   });
 

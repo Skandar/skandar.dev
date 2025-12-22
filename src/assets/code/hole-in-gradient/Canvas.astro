@@ -30,9 +30,9 @@ import "./global.css";
 <script>
   import { getHoleData } from "./utils/getHoleData.js";
 
-  const fillElement = document.querySelector(".canvas");
+  const fillElement = document.querySelector(".canvas") as HTMLCanvasElement;
 
-  function updateClipPath(el) {
+  function updateClipPath(el: HTMLCanvasElement) {
     const width = el.clientWidth;
     const height = el.clientHeight;
     const dpr = window.devicePixelRatio || 1;
@@ -42,7 +42,7 @@ import "./global.css";
 
     const { x, r } = getHoleData(el);
 
-    const ctx = el.getContext("2d");
+    const ctx = el.getContext("2d")!;
     ctx.scale(dpr, dpr);
 
     const gradient = ctx.createLinearGradient(0, r / 2, width, r / 2);
@@ -63,7 +63,7 @@ import "./global.css";
         return;
       }
 
-      updateClipPath(entry.target);
+      updateClipPath(entry.target as HTMLCanvasElement);
     }
   });
   observer.observe(fillElement);
