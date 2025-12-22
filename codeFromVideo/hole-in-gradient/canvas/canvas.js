@@ -1,0 +1,42 @@
+import { getHoleData } from "../utils/getHoleData.js";
+
+const fillElement = document.querySelector('.canvas');
+
+function updateClipPath(el) {
+  const width = el.clientWidth;
+  const height = el.clientHeight;
+  const dpr = window.devicePixelRatio || 1;
+
+  el.width = width * dpr;
+  el.height = height * dpr;
+
+  const { x, r } = getHoleData(el);
+
+  const ctx = el.getContext("2d");
+  ctx.scale(dpr, dpr);
+
+  const gradient = ctx.createLinearGradient(0, r / 2, width, r / 2);
+  gradient.addColorStop(0, "#d7e05e");
+  gradient.addColorStop(1, "#f28b2d");
+  ctx.fillStyle = gradient;
+
+  ctx.beginPath();
+  ctx.rect(0, 0, width, height);
+  ctx.arc(x,  r / 2 , r, 0, 2 * Math.PI, true);
+  ctx.clip('evenodd');
+  ctx.fillRect(0, 0, width, height);
+}
+
+const observer = new ResizeObserver((entries) => {
+  for (const entry of entries) {
+    if (!entry.target) {
+      return;
+    }
+
+    updateClipPath(entry.target);
+  }
+});
+observer.observe(fillElement);
+
+updateClipPath(fillElement);
+

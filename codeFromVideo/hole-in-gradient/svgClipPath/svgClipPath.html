@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-item=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="./svgClipPath.css">
+  <script src="./svgClipPath.js" type="module" defer></script>
+</head>
+<body>
+  <div class="card">
+    <div class="list">
+      <div class="item">
+        <p class="title">SVG clipPath </p>
+        <div id="clipPathScale" class="scale">
+          <div class="scale__track"></div>
+          <div class="scale__marker"></div>
+
+          <!-- Apply clipPath to div with gradient -->
+          <div class="scale__fill scale__fill--gradient clip--svg-clip-path">
+            <svg viewBox="0 0 1000 40" class="scale__svg">
+              <defs>
+                <clipPath id="svgClipPath">
+                  <path clip-rule="evenodd" d="M 0 0 H 489 V 40 H 0 Z M 61.125 -20 A 40 40 0 1 0 61.125 60 A 40 40 0 1 0 61.125 -20" />
+                </clipPath>
+              </defs>
+            </svg>
+          </div>
+
+          <!-- With SVG <rect> with gradient -->
+          <div class="scale__fill clip--svg-clip-path">
+            <svg viewBox="0 0 1000 40" class="scale__svg">
+              <defs>
+                <linearGradient id="clipPathSvgGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stop-color="#d7e05e" />
+                  <stop offset="100%" stop-color="#f28b2d" />
+                </linearGradient>
+
+                <clipPath id="svgClipPath">
+                  <path clip-rule="evenodd" d="M 0 0 H 485 V 40 H 0 Z M 60.625 -20 A 40 40 0 1 0 60.625 60 A 40 40 0 1 0 60.625 -20" />
+                </clipPath>
+              </defs>
+
+              <rect id="fill" x="0" y="0" width="100%" height="100%" fill="url(#clipPathSvgGradient)" clip-path="url(#svgClipPath)" class="scale__fill--gradient"/>
+            </svg>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+</body>
+</html>

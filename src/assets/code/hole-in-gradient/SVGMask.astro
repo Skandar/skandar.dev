@@ -1,0 +1,74 @@
+---
+import "./global.css";
+---
+
+<div class="card">
+  <div class="list">
+    <div class="item">
+      <div class="scale">
+        <div class="scale__track"></div>
+        <div class="scale__fill scale__fill--gradient scale__fill--svg-mask">
+        </div>
+        <div class="scale__marker"></div>
+        <svg
+          viewBox="0 0 1000 40"
+          preserveAspectRatio="none"
+          style="position:absolute"
+          class="svg"
+        >
+          <defs>
+            <mask
+              id="mask"
+              mask-type="luminance"
+              maskUnits="userSpaceOnUse"
+              maskContentUnits="userSpaceOnUse"
+            >
+              <rect x="0" y="0" width="100%" height="100%" fill="white"></rect>
+              <circle cx="100" cy="20" r="40" fill="black" class="maskCircle"
+              ></circle>
+            </mask>
+          </defs>
+        </svg>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .scale__fill--svg-mask {
+    mask-image: url(#mask);
+  }
+</style>
+
+<script>
+  import { getHoleData } from "./utils/getHoleData.js";
+
+  const fillElement = document.querySelector(".scale__fill--svg-mask");
+
+  function updateMask(el) {
+    const svg = document.querySelector(".svg");
+    const circle = svg.querySelector(".maskCircle");
+
+    const width = el.clientWidth;
+    const height = el.clientHeight;
+
+    svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
+
+    const { x: cx } = getHoleData(el);
+
+    circle.setAttribute("cx", cx);
+  }
+
+  const observer = new ResizeObserver((entries) => {
+    for (const entry of entries) {
+      if (!entry.target) {
+        return;
+      }
+
+      updateMask(entry.target);
+    }
+  });
+  observer.observe(fillElement);
+
+  updateMask(fillElement);
+</script>

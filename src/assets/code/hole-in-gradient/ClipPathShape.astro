@@ -1,0 +1,35 @@
+---
+import "./global.css";
+---
+
+<div class="card">
+  <div class="list">
+    <div class="item">
+      <div class="scale">
+        <div class="scale__track"></div>
+        <div class="scale__fill scale__fill--gradient clip--shape"></div>
+        <div class="scale__marker"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .clip--shape {
+    --x: var(--hole-position);
+    --r: var(--hole-radius);
+    --yTop: calc(var(--r) / -2);
+    --yBottom: calc(var(--r) * 1.5);
+
+    clip-path: shape(
+      evenodd from 0 0,
+      hline to 100%,
+      vline to 100%,
+      hline to 0,
+      close,
+      move to var(--x) var(--yTop),
+      arc to var(--x) var(--yBottom) of var(--r),
+      arc to var(--x) var(--yTop) of var(--r)
+    );
+  }
+</style>

@@ -1,0 +1,12 @@
+.scale__fill--css-mask-composite {
+  mask-image:
+    radial-gradient(
+      circle var(--hole-radius) at var(--hole-position),
+      #000 98%,
+      transparent 100%
+    ),
+    linear-gradient(#000);
+
+  mask-composite: exclude;
+  /* mask-composite: subtract; */
+}

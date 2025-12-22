@@ -1,0 +1,70 @@
+body {
+  --control-height: 40px;
+  --control-width: 1000px;
+  --border-radius: 44px;
+  --thumb-color: #fff;
+  --thumb-size: 40px;
+  --gradient-start: 10%;
+  --gradient-end: 90%;
+  --marker-position: 20%;
+
+  --hole-radius: var(--thumb-size);
+  --hole-position: 12.5%
+    /* --hole-position: calc(
+    100% * (var(--marker-position) - var(--gradient-start)) /
+    ((100% - var(--gradient-start)) - (100% - var(--gradient-end)))
+  ); */;
+}
+
+.card {
+  flex-grow: 1;
+  background-color: rgba(45, 51, 64, 0.2);
+  border-radius: var(--border-radius);
+}
+
+.list {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  padding: 40px;
+}
+
+.scale {
+  position: relative;
+  width: 100%;
+  height: var(--control-height);
+}
+
+.scale__track {
+  position: absolute;
+  z-index: 1;
+  width: 100%;
+  height: var(--control-height);
+  border-radius: var(--border-radius);
+  background-color: rgba(0, 0, 0, 0.15);
+}
+
+/* сама полоса */
+.scale__fill {
+  position: absolute;
+  left: var(--gradient-start);
+  right: calc(100% - var(--gradient-end));
+  height: var(--control-height);
+  border-radius: var(--border-radius);
+}
+
+.scale__fill--gradient {
+  background: linear-gradient(90deg, #d7e05e, #f28b2d);
+}
+
+.scale__marker {
+  position: absolute;
+  top: 0;
+  left: calc(var(--marker-position) - 20px);
+  z-index: 2;
+  width: var(--thumb-size);
+  height: var(--thumb-size);
+  background: white;
+  border-radius: 50%;
+}

@@ -1,0 +1,28 @@
+---
+import "./global.css";
+---
+
+<div class="card">
+  <div class="list">
+    <div class="item">
+      <div class="scale scale__border">
+        <div class="scale__track"></div>
+        <div class="scale__fill scale__fill--gradient"></div>
+        <div class="scale__marker scale__marker--border"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .scale__border {
+    overflow: hidden;
+  }
+
+  .scale__marker--border {
+    top: -20px;
+    left: calc(var(--marker-position) - 40px);
+    border: 20px solid #131820;
+    box-sizing: content-box;
+  }
+</style>

@@ -1,0 +1,102 @@
+---
+import "./global.css";
+---
+
+<div class="card">
+  <div class="list">
+    <div class="item">
+      <div id="clipPathScale" class="scale">
+        <div class="scale__track"></div>
+        <div class="scale__marker"></div>
+        <div
+          id="svgClipPathLinearGradient"
+          class="scale__fill clip--svg-clip-path"
+        >
+          <svg viewBox="0 0 1000 40" class="scale__svg">
+            <defs>
+              <linearGradient
+                id="clipPathSvgGradient"
+                x1="0%"
+                y1="0%"
+                x2="100%"
+                y2="0%"
+              >
+                <stop offset="0%" stop-color="#d7e05e"></stop>
+                <stop offset="100%" stop-color="#f28b2d"></stop>
+              </linearGradient>
+
+              <clipPath id="svgClipPath">
+                <path clip-rule="evenodd"></path>
+              </clipPath>
+            </defs>
+
+            <rect
+              id="fill"
+              x="0"
+              y="0"
+              width="100%"
+              height="100%"
+              fill="url(#clipPathSvgGradient)"
+              clip-path="url(#svgClipPath)"
+              class="scale__fill--gradient"></rect>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  import { getHoleData } from "./utils/getHoleData.js";
+
+  const fillElement = document.querySelector("#svgClipPathLinearGradient");
+
+  function updateClipPath(el) {
+    const svg = el.querySelector("svg");
+    const clipPath = el.querySelector("clipPath path");
+
+    const width = el.clientWidth;
+    const height = el.clientHeight;
+
+    svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
+
+    const { x, yTop, yBottom, r } = getHoleData(el);
+
+    const path = [
+      "M 0 0",
+      `H ${width}`,
+      `V ${height}`,
+      "H 0",
+      "Z",
+      `M ${x} ${yTop}`,
+      `A ${r} ${r} 0 1 0 ${x} ${yBottom}`,
+      `A ${r} ${r} 0 1 0 ${x} ${yTop} `,
+    ].join(" ");
+
+    clipPath.setAttribute("d", `${path}`);
+  }
+
+  const observer = new ResizeObserver((entries) => {
+    for (const entry of entries) {
+      if (!entry.target) {
+        return;
+      }
+
+      updateClipPath(entry.target);
+    }
+  });
+  observer.observe(fillElement);
+
+  updateClipPath(fillElement);
+</script>
+
+<style>
+  .clip--svg-clip-path {
+    overflow: hidden;
+    clip-path: url(#svgClipPath);
+  }
+  .scale__svg {
+    width: 100%;
+    height: 100%;
+  }
+</style>
