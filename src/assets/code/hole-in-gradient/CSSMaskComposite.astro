@@ -1,0 +1,32 @@
+---
+import "./global.css";
+---
+
+<div class="card">
+  <div class="list">
+    <div class="item">
+      <div class="scale">
+        <div class="scale__track"></div>
+        <div
+          class="scale__fill scale__fill--gradient scale__fill--css-mask-composite"
+        >
+        </div>
+        <div class="scale__marker"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .scale__fill--css-mask-composite {
+    mask-image:
+      radial-gradient(
+        circle var(--hole-radius) at var(--hole-position),
+        #000 98%,
+        transparent 100%
+      ),
+      linear-gradient(#000);
+
+    mask-composite: exclude;
+  }
+</style>

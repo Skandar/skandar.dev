@@ -1,0 +1,36 @@
+---
+import "./global.css";
+---
+
+<div class="card">
+  <div class="list">
+    <div class="item">
+      <div class="scale scale__mix-blend-mode">
+        <div class="scale__track"></div>
+        <div class="scale__fill scale__fill--gradient"></div>
+        <div class="scale__hole"></div>
+        <div class="scale__marker"></div>
+      </div>
+    </div>
+  </div>
+
+  <style>
+    .scale__mix-blend-mode {
+      overflow: hidden;
+    }
+
+    .scale__hole {
+      width: 80px;
+      height: 80px;
+      position: absolute;
+      left: calc(var(--marker-position) - var(--hole-radius));
+      top: calc(var(--hole-radius) / -2);
+      background: radial-gradient(
+        circle 40px at center,
+        rgb(17 25 31) 99%,
+        transparent 100%
+      );
+      mix-blend-mode: normal;
+    }
+  </style>
+</div>

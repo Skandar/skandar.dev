@@ -1,0 +1,10 @@
+.scale__border {
+  overflow: hidden;
+}
+
+.scale__marker--border {
+  top: -20px;
+  left: calc(var(--marker-position) - 40px);
+  border: 20px solid #131820;
+  box-sizing: content-box;
+}

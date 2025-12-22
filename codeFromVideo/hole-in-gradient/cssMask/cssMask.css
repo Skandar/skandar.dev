@@ -1,0 +1,8 @@
+.scale__fill--css-mask {
+  mask-image: radial-gradient(
+    circle var(--hole-radius) at var(--hole-position),
+    transparent 0 var(--hole-radius),
+    /* With 101% we have much softer edge of the circle */ #000 101%
+  );
+  /* mask-mode: luminance; */
+}

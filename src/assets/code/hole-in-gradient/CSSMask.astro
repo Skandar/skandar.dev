@@ -1,0 +1,26 @@
+---
+import "./global.css";
+---
+
+<div class="card">
+  <div class="list">
+    <div class="item">
+      <div class="scale">
+        <div class="scale__track"></div>
+        <div class="scale__fill scale__fill--gradient scale__fill--css-mask">
+        </div>
+        <div class="scale__marker"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .scale__fill--css-mask {
+    mask-image: radial-gradient(
+      circle var(--hole-radius) at var(--hole-position),
+      transparent 0 var(--hole-radius),
+      /* With 101% we have much softer edge of the circle */ #000 101%
+    );
+  }
+</style>

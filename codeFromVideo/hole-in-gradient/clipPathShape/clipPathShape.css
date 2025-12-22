@@ -1,0 +1,17 @@
+.clip--shape {
+  --x: var(--hole-position);
+  --r: var(--hole-radius);
+  --yTop: calc(var(--r) / -2);
+  --yBottom: calc(var(--r) * 1.5);
+
+  clip-path: shape(
+    evenodd from 0 0,
+    hline to 100%,
+    vline to 100%,
+    hline to 0,
+    close,
+    move to var(--x) var(--yTop),
+    arc to var(--x) var(--yBottom) of var(--r),
+    arc to var(--x) var(--yTop) of var(--r)
+  );
+}

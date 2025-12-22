@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-item=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="./svgMask.css">
+
+  <script src="./svgMask.js" type="module" defer></script>
+</head>
+<body>
+  <div class="card">
+    <div class="list">
+      <div class="item">
+        <p class="title">SVG mask </p>
+        <div class="scale">
+          <div class="scale__track"></div>
+          <div class="scale__fill scale__fill--gradient scale__fill--svg-mask"></div>
+          <div class="scale__marker"></div>
+          <svg viewBox="0 0 1000 40" preserveAspectRatio="none" style="position:absolute" class="svg">
+            <defs>
+              <mask id="mask" mask-type="luminance" maskUnits="userSpaceOnUse" maskContentUnits="userSpaceOnUse">
+                <rect x="0" y="0" width="100%" height="100%" fill="white"  />
+                <circle cx="100" cy="20" r="40" fill="black" class="maskCircle" />
+              </mask>
+            </defs>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

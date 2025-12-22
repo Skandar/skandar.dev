@@ -1,0 +1,13 @@
+.clip--svg-clip-path {
+  overflow: hidden;
+  clip-path: url(#svgClipPath);
+}
+
+/* #svgClipPath path {
+   d: path("M 0 0 H 489 V 40 H 0 Z M 61.125 -20 A 40 40 0 1 0 61.125 60 A 40 40 0 1 0 61.125 -20");
+} */
+
+.scale__svg {
+  width: 100%;
+  height: 100%;
+}
