@@ -23,7 +23,6 @@ const common = {
   "subscribe.telegram.url": "https://t.me/skandar_dev",
   "meta.site": "skandar.dev",
   "meta.description": "Welcome to my website!",
-  "meta.author": "Aleksandr Slugin",
 };
 
 export const ui = {
@@ -32,6 +31,7 @@ export const ui = {
 
     "meta.description":
       "Articles about front-end, web development, CSS, JS, React, and more",
+    "meta.author": "Aleksandr Slugin",
 
     "nav.home": "Home",
     "nav.articles": "Articles",
@@ -83,6 +83,7 @@ export const ui = {
 
     "meta.description":
       "Статьи про фронтенд, веб-разработку, CSS, JS, React и многое другое",
+    "meta.author": "Александр Слугин",
 
     "nav.home": "Главная",
     "nav.articles": "Статьи",
@@ -134,6 +135,7 @@ export const ui = {
 
     "meta.description":
       "Статті про фронтенд, веб-розробку, CSS, JS, React та багато іншого",
+    "meta.author": "Олександр Слугін",
 
     "nav.home": "Головна",
     "nav.articles": "Статті",
@@ -185,6 +187,7 @@ export const ui = {
 
     "meta.description":
       "Articole despre front-end, dezvoltare web, CSS, JS, React și multe altele",
+    "meta.author": "Aleksandr Slugin",
 
     "nav.home": "Acasă",
     "nav.articles": "Articole",
