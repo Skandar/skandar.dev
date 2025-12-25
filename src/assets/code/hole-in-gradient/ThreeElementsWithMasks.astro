@@ -1,0 +1,69 @@
+---
+import "./global.css";
+---
+
+<div class="card">
+  <div class="list">
+    <div class="item">
+      <div class="scale">
+        <div class="scale__track"></div>
+        <div class="scale__fill">
+          <div
+            class="scale__start scale__fill--gradient scale__fill--mask-left"
+          >
+          </div>
+          <div class="scale__marker"></div>
+          <div class="scale__end scale__fill--gradient scale__fill--mask-right">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .scale__fill {
+    display: flex;
+    align-items: center;
+    container-type: inline-size;
+  }
+
+  .scale__start,
+  .scale__end {
+    background-size: 100cqw 100%;
+    height: 100%;
+    flex: 1 1 auto;
+  }
+
+  .scale__start {
+    width: 20%;
+    border-radius: var(--border-radius) 0 0 var(--border-radius);
+  }
+
+  .scale__end {
+    background-position-x: right;
+    border-radius: 0 var(--border-radius) var(--border-radius) 0;
+  }
+
+  .scale__marker {
+    position: static;
+    box-sizing: content-box;
+    background-clip: padding-box;
+  }
+
+  .scale__fill--mask-left {
+    mask-image: radial-gradient(
+      circle var(--hole-radius) at calc(100% + calc(var(--hole-radius) / 2)) 50%,
+      transparent 99%,
+      black 100%
+    );
+  }
+
+  .scale__fill--mask-right {
+    mask-image: radial-gradient(
+      circle var(--hole-radius) at calc(0px - calc(var(--hole-radius) / 2)) 50%,
+      transparent 99%,
+      black 100%
+    );
+  }
+</style>

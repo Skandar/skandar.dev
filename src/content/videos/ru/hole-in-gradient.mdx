@@ -23,6 +23,7 @@ import Canvas from "../../../assets/code/hole-in-gradient/Canvas.astro";
 import CSSMask from "../../../assets/code/hole-in-gradient/CSSMask.astro";
 import CSSMaskComposite from "../../../assets/code/hole-in-gradient/CSSMaskComposite.astro";
 import SVGMask from "../../../assets/code/hole-in-gradient/SVGMask.astro";
+import ThreeElementsWithMasks from "../../../assets/code/hole-in-gradient/ThreeElementsWithMasks.astro";
 
 import ElementWithGradient from "../../../../public/images/hole-in-gradient/element.svg";
 import ClipPathImagePath1 from "../../../../public/images/hole-in-gradient/clip-path/1.png";
@@ -360,7 +361,7 @@ updateClipPath(fillElement);
 
 К сожалению на данный момент этот способ не работает в Safari так как Safari не поддерживают реферсы на SVG-маски в CSS свойстве `mask-image`.
 
-## Ending
+## Заключение
 
 Это все способы, которые я нашёл, чтобы сделать вырез в градиенте. Если знаешь другие варианты — обязательно напиши в комментарии к видео. Мне будет интересно узнать как ещё это можно реализовать. Спасибо за просмотр!
 
@@ -369,3 +370,25 @@ updateClipPath(fillElement);
 - [Видео на YouTube](https://youtu.be/MUjO7AfjcqQ)
 - [Дизайн в Figma](https://www.figma.com/community/file/1045320388292781743)
 - [Код](https://github.com/Skandar/skandar.dev/tree/main/codeFromVideo/hole-in-gradient/README_RU.md)
+
+## Update
+
+После публикации мне подсказали в комментарии к видео что можно сделать проще с помощью 3-х элементов с масками и на чистом CSS. Вот как это выглядит:
+
+<ThreeElementsWithMasks />
+
+```css
+/* маска для левого элемента  */
+mask-image: radial-gradient(
+  circle 40px at calc(100% + 20px) 50%,
+  transparent 99%,
+  black 100%
+);
+
+/* маска для правого элемента */
+mask-image: radial-gradient(
+  circle 40px at -20px 50%,
+  transparent 99%,
+  black 100%
+);
+```

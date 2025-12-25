@@ -23,6 +23,7 @@ import Canvas from "../../../assets/code/hole-in-gradient/Canvas.astro";
 import CSSMask from "../../../assets/code/hole-in-gradient/CSSMask.astro";
 import CSSMaskComposite from "../../../assets/code/hole-in-gradient/CSSMaskComposite.astro";
 import SVGMask from "../../../assets/code/hole-in-gradient/SVGMask.astro";
+import ThreeElementsWithMasks from "../../../assets/code/hole-in-gradient/ThreeElementsWithMasks.astro";
 
 import ElementWithGradient from "../../../../public/images/hole-in-gradient/element.svg";
 import ClipPathImagePath1 from "../../../../public/images/hole-in-gradient/clip-path/1.png";
@@ -370,3 +371,25 @@ That’s all the ways I found to create a cut-out in a gradient. If you know oth
 - [Video on YouTube](https://youtu.be/MUjO7AfjcqQ)
 - [Design in Figma](https://www.figma.com/community/file/1045320388292781743)
 - [Code](https://github.com/Skandar/skandar.dev/tree/main/codeFromVideo/hole-in-gradient)
+
+## Update
+
+After I published the video, viewer pointed out in the comments that there’s a simpler way to do it using three elements with masks in pure CSS. Here’s what it looks like:
+
+<ThreeElementsWithMasks />
+
+```css
+/* mask for the left element  */
+mask-image: radial-gradient(
+  circle 40px at calc(100% + 20px) 50%,
+  transparent 99%,
+  black 100%
+);
+
+/* mask for the right element */
+mask-image: radial-gradient(
+  circle 40px at -20px 50%,
+  transparent 99%,
+  black 100%
+);
+```
