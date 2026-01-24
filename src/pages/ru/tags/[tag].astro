@@ -4,6 +4,7 @@ import { getCollection } from "astro:content";
 import { getNLastArticles } from "~/utils/getNLastArticles";
 import { getCollectionFilter } from "~/utils/getCollectionFilter";
 import TagPage from "~/layouts/TagPage/TagPage.astro";
+import type { TAGS } from "~/i18n/ui";
 
 export async function getStaticPaths() {
   const isDev = import.meta.env.DEV;
@@ -62,9 +63,13 @@ export async function getStaticPaths() {
 
   return Object.entries(tagMap).map(([tag, entries]) => ({
     params: {
-      tag: tag.split(" ").join("-").toLowerCase(),
+      tag: tag as keyof typeof TAGS,
     },
-    props: { articles: entries.articles, videos: entries.videos, tag },
+    props: {
+      articles: entries.articles,
+      videos: entries.videos,
+      tag: tag as keyof typeof TAGS,
+    },
   }));
 }
 ---

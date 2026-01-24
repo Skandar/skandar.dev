@@ -1,13 +1,21 @@
 ---
+import type { CollectionEntry } from "astro:content";
+
 import PageLayout from "~/layouts/Page/Page.astro";
 import Container from "~/components/Container/Container.astro";
 import ArticleList from "~/components/ArticleList/ArticleList.astro";
-import { useTranslations } from "~/i18n/utils";
-import { DEFAULT_LANG, type Language } from "~/i18n/ui";
+import { getCurrentLocale, useTranslations } from "~/i18n/utils";
+import { TAGS, type Language } from "~/i18n/ui";
 import { styles } from "./TagPage.css";
 import VideoList from "~/components/VideoList/VideoList.astro";
 
-const { currentLocale = DEFAULT_LANG } = Astro;
+interface Props {
+  articles: Array<CollectionEntry<"articles">>;
+  videos: Array<CollectionEntry<"videos">>;
+  tag: keyof typeof TAGS;
+}
+
+const currentLocale = getCurrentLocale(Astro);
 const { articles, videos, tag } = Astro.props;
 
 const t = useTranslations(currentLocale as Language);
@@ -19,7 +27,7 @@ const t = useTranslations(currentLocale as Language);
       <div class={styles.wrapper}>
         <h1 class={styles.title}>
           {t("tagPage.title.main")}
-          <span class={styles.tag}>{tag}</span>
+          <span class={styles.tag}>{TAGS[tag][currentLocale]}</span>
         </h1>
 
         {

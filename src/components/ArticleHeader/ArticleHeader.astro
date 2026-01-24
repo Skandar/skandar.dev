@@ -3,15 +3,15 @@ import type { CollectionEntry } from "astro:content";
 
 import { getLocalizedUrl } from "~/utils/getLocalizedPath";
 import { styles } from "./ArticleHeader.css";
-import { useTranslations } from "~/i18n/utils";
-import { DEFAULT_LANG, type Language } from "~/i18n/ui";
+import { getCurrentLocale, useTranslations } from "~/i18n/utils";
+import { TAGS, type Language } from "~/i18n/ui";
 
 type Props = Pick<
   CollectionEntry<"articles">["data"],
   "title" | "publishedTime" | "modifiedTime" | "tags"
 >;
 
-const { currentLocale = DEFAULT_LANG } = Astro;
+const currentLocale = getCurrentLocale(Astro);
 const { title, publishedTime, modifiedTime, tags } = Astro.props;
 
 const t = useTranslations(currentLocale as Language);
@@ -60,7 +60,7 @@ const t = useTranslations(currentLocale as Language);
                 )}
                 data-astro-prefetch
               >
-                {tag}
+                {TAGS[tag][currentLocale]}
               </a>
             ))}
           </div>

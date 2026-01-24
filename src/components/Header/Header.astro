@@ -4,9 +4,10 @@ import * as styles from "./Header.css";
 import Container from "../Container/Container.astro";
 import { getLocalizedUrl } from "~/utils/getLocalizedPath";
 import type { Language } from "../../i18n/ui";
-import { useTranslations } from "../../i18n/utils";
+import { getCurrentLocale, useTranslations } from "../../i18n/utils";
 
-const { currentLocale = "en", url } = Astro;
+const { url } = Astro;
+const currentLocale = getCurrentLocale(Astro);
 
 const t = useTranslations(currentLocale as Language);
 

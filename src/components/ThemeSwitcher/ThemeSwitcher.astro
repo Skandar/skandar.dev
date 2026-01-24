@@ -1,11 +1,11 @@
 ---
-import { DEFAULT_LANG, type Language } from "../../i18n/ui";
-import { useTranslations } from "../../i18n/utils";
+import { type Language } from "../../i18n/ui";
+import { getCurrentLocale, useTranslations } from "../../i18n/utils";
 import { styles } from "./ThemeSwitcher.css";
 import { styles as buttonStyles } from "../Button/Button.css";
 import Button from "../Button/Button.astro";
 
-const { currentLocale = DEFAULT_LANG } = Astro;
+const currentLocale = getCurrentLocale(Astro);
 
 const t = useTranslations(currentLocale as Language);
 

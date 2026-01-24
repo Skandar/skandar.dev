@@ -1,12 +1,14 @@
 ---
 import { getLocalizedUrl } from "~/utils/getLocalizedPath";
-import { useTranslations } from "~/i18n/utils";
-import { DEFAULT_LANG, languagesWithLabels, type Language } from "~/i18n/ui";
+import { getCurrentLocale, useTranslations } from "~/i18n/utils";
+import { languagesWithLabels, type Language } from "~/i18n/ui";
 import Button from "../Button/Button.astro";
 import { styles } from "./LangSwitcher.css";
 import { getPathWithoutLocale } from "~/utils/getPathWithoutLocale";
 
-const { currentLocale = DEFAULT_LANG, url } = Astro;
+const { url } = Astro;
+const currentLocale = getCurrentLocale(Astro);
+
 const t = useTranslations(currentLocale as Language);
 ---
 
@@ -16,7 +18,10 @@ const t = useTranslations(currentLocale as Language);
     {
       Object.entries(languagesWithLabels).map(([key, value]) => (
         <Button
-          href={getLocalizedUrl(key, getPathWithoutLocale(url.pathname))}
+          href={getLocalizedUrl(
+            key as Language,
+            getPathWithoutLocale(url.pathname),
+          )}
           size="small"
           appearance={key === currentLocale ? "filled" : "outline"}
           class={styles.button}

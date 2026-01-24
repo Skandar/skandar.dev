@@ -5,13 +5,13 @@ import PageLayout from "~/layouts/Page/Page.astro";
 import Container from "~/components/Container/Container.astro";
 import { getCollectionFilter } from "~/utils/getCollectionFilter";
 import TagList from "~/components/TagList/TagList.astro";
-import { DEFAULT_LANG, type Language } from "~/i18n/ui";
-import { useTranslations } from "~/i18n/utils";
+import { TAGS, type Language } from "~/i18n/ui";
+import { getCurrentLocale, useTranslations } from "~/i18n/utils";
 import { styles } from "./TagListPage.css";
 
 const isDev = import.meta.env.DEV;
 
-const { currentLocale = DEFAULT_LANG } = Astro;
+const currentLocale = getCurrentLocale(Astro);
 
 const t = useTranslations(currentLocale as Language);
 
@@ -43,7 +43,7 @@ const entriesMap = [...videos, ...articles].reduce(
       } else {
         acc[tag] = {
           title: tag,
-          tag: tag.toLocaleLowerCase().split(" ").join("-"),
+          tag: tag,
           total: 1,
         };
       }
@@ -51,7 +51,10 @@ const entriesMap = [...videos, ...articles].reduce(
 
     return acc;
   },
-  {} as Record<string, { title: string; tag: string; total: number }>,
+  {} as Record<
+    string,
+    { title: keyof typeof TAGS; tag: keyof typeof TAGS; total: number }
+  >,
 );
 
 const entries = Object.values(entriesMap);

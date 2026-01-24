@@ -1,14 +1,14 @@
 ---
 import Container from "../Container/Container.astro";
 import type { Language } from "../../i18n/ui";
-import { useTranslations } from "../../i18n/utils";
+import { getCurrentLocale, useTranslations } from "../../i18n/utils";
 import NavLink from "../NavLink/NavLink.astro";
 import { styles } from "./ShareArticle.css";
 
 const { url } = Astro;
 const { title } = Astro.props;
 
-const { currentLocale = "en" } = Astro;
+const currentLocale = getCurrentLocale(Astro);
 
 const t = useTranslations(currentLocale as Language);
 

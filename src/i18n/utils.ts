@@ -1,3 +1,4 @@
+import type { AstroGlobal } from "astro";
 import { ui, DEFAULT_LANG, type Language } from "./ui";
 
 type Keys = keyof (typeof ui)[Language];
@@ -17,3 +18,7 @@ export function useTranslations(lang: Language) {
     return string;
   };
 }
+
+export const getCurrentLocale = (Astro: AstroGlobal): Language => {
+  return (Astro.currentLocale || DEFAULT_LANG) as Language;
+};

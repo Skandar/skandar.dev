@@ -2,8 +2,8 @@
 import { getCollection } from "astro:content";
 
 import Container from "~/components/Container/Container.astro";
-import { DEFAULT_LANG, type Language } from "~/i18n/ui";
-import { useTranslations } from "~/i18n/utils";
+import { type Language } from "~/i18n/ui";
+import { getCurrentLocale, useTranslations } from "~/i18n/utils";
 import Articles from "~/components/ArticleList/ArticleList.astro";
 import PageLayout from "~/layouts/Page/Page.astro";
 import { getCollectionFilter } from "~/utils/getCollectionFilter";
@@ -11,8 +11,7 @@ import { getNLastArticles } from "~/utils/getNLastArticles";
 import { styles } from "./ArticleList.css";
 
 const isDev = import.meta.env.DEV;
-
-const { currentLocale = DEFAULT_LANG } = Astro;
+const currentLocale = getCurrentLocale(Astro);
 
 const entries = await getCollection("articles", ({ data, slug }) =>
   getCollectionFilter({

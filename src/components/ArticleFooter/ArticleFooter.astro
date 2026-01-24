@@ -1,16 +1,15 @@
 ---
-import { useTranslations } from "~/i18n/utils";
+import { getCurrentLocale, useTranslations } from "~/i18n/utils";
 import type { Language } from "~/i18n/ui";
 import NavLink from "../NavLink/NavLink.astro";
 import { styles } from "./ArticleFooter.css";
-import { DEFAULT_LANG } from "~/i18n/ui";
 
 type Props = {
   slug: string;
   collection: string;
 };
 
-const { currentLocale = DEFAULT_LANG } = Astro;
+const currentLocale = getCurrentLocale(Astro);
 const { slug, collection } = Astro.props;
 
 const t = useTranslations(currentLocale as Language);
