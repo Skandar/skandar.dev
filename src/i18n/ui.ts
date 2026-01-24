@@ -1,7 +1,5 @@
 export type Language = keyof typeof languagesWithLabels;
 
-export const locales = ["en_US", "ru_RU", "uk_UA", "ro_MD"];
-
 export const languagesWithLabels = {
   en: "English",
   ru: "Русский",
@@ -232,5 +230,92 @@ export const ui = {
     "404.title": "404 - Pagina nu a fost găsită",
     "404.description":
       "Pagina nu a fost găsită. Poate că există o greșeală în link sau pagina a fost ștearsă.",
+  },
+} as const;
+
+export const TAGS = {
+  javascript: {
+    en: "JavaScript",
+    ru: "JavaScript",
+    uk: "JavaScript",
+    ro: "JavaScript",
+  },
+  typescript: {
+    en: "TypeScript",
+    ru: "TypeScript",
+    uk: "TypeScript",
+    ro: "TypeScript",
+  },
+  react: {
+    en: "React",
+    ru: "React",
+    uk: "React",
+    ro: "React",
+  },
+  css: {
+    en: "CSS",
+    ru: "CSS",
+    uk: "CSS",
+    ro: "CSS",
+  },
+  html: {
+    en: "HTML",
+    ru: "HTML",
+    uk: "HTML",
+    ro: "HTML",
+  },
+  svg: {
+    en: "SVG",
+    ru: "SVG",
+    uk: "SVG",
+    ro: "SVG",
+  },
+  debugging: {
+    en: "Debugging",
+    ru: "Отладка",
+    uk: "Налагодження",
+    ro: "Depanare",
+  },
+  chrome: {
+    en: "Chrome",
+    ru: "Chrome",
+    uk: "Chrome",
+    ro: "Chrome",
+  },
+  dev_tools: {
+    en: "DevTools",
+    ru: "DevTools",
+    uk: "DevTools",
+    ro: "DevTools",
+  },
+  career: {
+    en: "Career",
+    ru: "Карьера",
+    uk: "Кар'єра",
+    ro: "Carieră",
+  },
+  dns: {
+    en: "DNS",
+    ru: "DNS",
+    uk: "DNS",
+    ro: "DNS",
+  },
+  browser: {
+    en: "Browser",
+    ru: "Браузер",
+    uk: "Браузер",
+    ro: "Browser",
+  },
+  astro: {
+    en: "Astro",
+    ru: "Astro",
+    uk: "Astro",
+    ro: "Astro",
+  },
+  typography: {
+    en: "Typography",
+    ru: "Типографика",
+    uk: "Типографіка",
+    ro: "Tipografie",
   },
 } as const;

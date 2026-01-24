@@ -1,11 +1,11 @@
 ---
 import NavLink from "../NavLink/NavLink.astro";
 import { styles } from "./Subscriptions.css";
-import { useTranslations } from "../../i18n/utils";
-import { DEFAULT_LANG, type Language } from "../../i18n/ui";
+import { getCurrentLocale, useTranslations } from "../../i18n/utils";
+import { type Language } from "../../i18n/ui";
 import { removeTrailingSlash } from "~/utils/removeTrailingSlash";
 
-const { currentLocale = DEFAULT_LANG } = Astro;
+const currentLocale = getCurrentLocale(Astro);
 
 const t = useTranslations(currentLocale as Language);
 

@@ -1,12 +1,11 @@
 ---
 import Container from "~/components/Container/Container.astro";
-
-import { DEFAULT_LANG, type Language } from "~/i18n/ui";
-import { useTranslations } from "~/i18n/utils";
+import { type Language } from "~/i18n/ui";
+import { getCurrentLocale, useTranslations } from "~/i18n/utils";
 import BaseLayout from "../Base/Base.astro";
 import { styles } from "./404.css";
 
-const { currentLocale = DEFAULT_LANG } = Astro;
+const currentLocale = getCurrentLocale(Astro);
 const t = useTranslations(currentLocale as Language);
 ---
 

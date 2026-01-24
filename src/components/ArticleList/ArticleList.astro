@@ -3,15 +3,15 @@ import type { InferGetStaticPropsType } from "astro";
 import { getLocalizedUrl } from "~/utils/getLocalizedPath";
 import { getPathWithoutLocale } from "~/utils/getPathWithoutLocale";
 import type { getStaticPaths } from "~/pages/articles/[slug].astro";
-import { DEFAULT_LANG } from "~/i18n/ui";
 import ArticleEntry from "../ArticleEntry/ArticleEntry.astro";
 import { styles } from "./ArticleList.css";
+import { getCurrentLocale } from "~/i18n/utils";
 
 interface Props {
   entries: Array<InferGetStaticPropsType<typeof getStaticPaths>>;
 }
 
-const { currentLocale = DEFAULT_LANG } = Astro;
+const currentLocale = getCurrentLocale(Astro);
 const { entries } = Astro.props;
 ---
 

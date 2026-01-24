@@ -4,15 +4,15 @@ import { type CollectionEntry, getCollection } from "astro:content";
 
 import { removeTrailingSlash } from "~/utils/removeTrailingSlash";
 import { getPathWithoutLocale } from "~/utils/getPathWithoutLocale";
-import { useTranslations } from "~/i18n/utils";
-import { DEFAULT_LANG, languages, locales, type Language } from "~/i18n/ui";
+import { getCurrentLocale, useTranslations } from "~/i18n/utils";
+import { languages, TAGS, type Language } from "~/i18n/ui";
 import "~/styles/global.css";
 import { getLocalizedUrl } from "~/utils/getLocalizedPath";
 import GoogleAnalytics from "./GoogleAnalytics.astro";
 
 type Props = Partial<CollectionEntry<"articles">["data"]>;
 
-const { currentLocale = DEFAULT_LANG } = Astro;
+const currentLocale = getCurrentLocale(Astro);
 
 const canonicalUrl = removeTrailingSlash(
   new URL(Astro.url.pathname, Astro.site).toString(),
@@ -65,6 +65,8 @@ function formatTitle(title: string | undefined) {
 }
 
 const title = formatTitle(rawTitle);
+
+const LOCALES = ["en_US", "ru_RU", "uk_UA", "ro_MD"];
 ---
 
 <!-- Global Metadata -->
@@ -144,7 +146,7 @@ const title = formatTitle(rawTitle);
 <meta property="og:image:height" content="630" />
 <meta property="og:site_name" content={t("meta.site")} />
 {
-  locales.map((locale) => (
+  LOCALES.map((locale) => (
     <meta
       property={
         locale.startsWith(currentLocale) ? "og:locale" : "og:locale:alternate"
@@ -172,7 +174,12 @@ const title = formatTitle(rawTitle);
   )
 }
 {isArticle && <meta property="article:author" content={t("meta.author")} />}
-{isArticle && tags?.map((tag) => <meta property="article:tag" content={tag} />)}
+{
+  isArticle &&
+    tags?.map((tag) => (
+      <meta property="article:tag" content={TAGS[tag][currentLocale]} />
+    ))
+}
 
 <!-- Twitter (X) -->
 <meta property="twitter:card" content="summary_large_image" />

@@ -6,12 +6,12 @@ import Container from "~/components/Container/Container.astro";
 import { getNLastArticles } from "~/utils/getNLastArticles";
 import { getCollectionFilter } from "~/utils/getCollectionFilter";
 import ArticleList from "~/components/ArticleList/ArticleList.astro";
-import { DEFAULT_LANG, type Language } from "~/i18n/ui";
-import { useTranslations } from "~/i18n/utils";
+import { type Language } from "~/i18n/ui";
+import { getCurrentLocale, useTranslations } from "~/i18n/utils";
 import { styles } from "./Main.css";
 import VideoList from "~/components/VideoList/VideoList.astro";
 
-const { currentLocale = DEFAULT_LANG } = Astro;
+const currentLocale = getCurrentLocale(Astro);
 const t = useTranslations(currentLocale as Language);
 
 const articles: CollectionEntry<"articles">[] = await getCollection(

@@ -1,11 +1,13 @@
 import { defineCollection, z } from "astro:content";
+import { TAGS } from "~/i18n/ui";
 
 const schema = z.object({
   title: z.string(),
   description: z.string(),
   publishedTime: z.coerce.date(),
   modifiedTime: z.coerce.date().optional(),
-  tags: z.array(z.string()),
+  // tags: z.array(z.string()),
+  tags: z.array(z.enum(Object.keys(TAGS) as [keyof typeof TAGS])),
   ogImage: z.string().optional(),
   ogImageAlt: z.string().optional(),
   ogType: z.enum(["website", "article"]).optional(),

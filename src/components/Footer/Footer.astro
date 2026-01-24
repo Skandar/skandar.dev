@@ -4,10 +4,10 @@ import Subscriptions from "../Subscriptions/Subscriptions.astro";
 import LangSwitcher from "../LangSwitcher/LangSwitcher.astro";
 import { styles } from "./Footer.css";
 import ThemeSwitcher from "../ThemeSwitcher/ThemeSwitcher.astro";
-import { DEFAULT_LANG, type Language } from "~/i18n/ui";
-import { useTranslations } from "~/i18n/utils";
+import { type Language } from "~/i18n/ui";
+import { getCurrentLocale, useTranslations } from "~/i18n/utils";
 
-const { currentLocale = DEFAULT_LANG } = Astro;
+const currentLocale = getCurrentLocale(Astro);
 const t = useTranslations(currentLocale as Language);
 
 const startDate = 2024;
