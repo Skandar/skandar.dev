@@ -113,6 +113,7 @@ export const ui = {
 
     "subscribe.title": "Подпишись",
     "subscribe.youtube.url": "https://youtube.com/@skandar_dev",
+    "subscribe.telegram.url": "https://t.me/skandar_dev_ru",
 
     "article.tags": "Теги",
     "article.publishedTime": "Опубликовано",
