@@ -18,7 +18,6 @@ const common = {
   "subscribe.linkedin": "LinkedIn",
   "subscribe.youtube.title": "YouTube",
   "subscribe.telegram.title": "Telegram",
-  "subscribe.telegram.url": "https://t.me/skandar_dev",
   "meta.site": "skandar.dev",
   "meta.description": "Welcome to my website!",
 };
@@ -60,7 +59,8 @@ export const ui = {
     "theme.system": "System",
 
     "subscribe.title": "Subscribe",
-    "subscribe.youtube.url": "https://youtube.com/@SkandarDev",
+    "subscribe.youtube.url": "https://youtube.com/@skandar_dev_en",
+    "subscribe.telegram.url": "https://t.me/skandar_dev",
 
     "article.tags": "Tags",
     "article.publishedTime": "Published",
@@ -112,7 +112,7 @@ export const ui = {
     "theme.system": "Системная",
 
     "subscribe.title": "Подпишись",
-    "subscribe.youtube.url": "https://youtube.com/@skandar_dev",
+    "subscribe.youtube.url": "https://youtube.com/@skandar_dev_ru",
     "subscribe.telegram.url": "https://t.me/skandar_dev_ru",
 
     "article.tags": "Теги",
@@ -165,7 +165,8 @@ export const ui = {
     "theme.system": "Системна",
 
     "subscribe.title": "Підпишись",
-    "subscribe.youtube.url": "https://youtube.com/@SkandarDev",
+    "subscribe.youtube.url": "https://youtube.com/@skandar_dev_ukr",
+    "subscribe.telegram.url": "https://t.me/skandar_dev_uk",
 
     "article.tags": "Теги",
     "article.publishedTime": "Опубліковано",
@@ -217,7 +218,8 @@ export const ui = {
     "theme.system": "Sistemului",
 
     "subscribe.title": "Abonează-te",
-    "subscribe.youtube.url": "https://youtube.com/@SkandarDev",
+    "subscribe.youtube.url": "https://youtube.com/@skandar_dev_ro",
+    "subscribe.telegram.url": "https://t.me/skandar_dev_ro",
 
     "article.tags": "Tags",
     "article.publishedTime": "Publicat",
