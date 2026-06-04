@@ -1,4 +1,4 @@
-import { languages } from "src/i18n/ui";
+import { languages } from "~/i18n/ui";
 
 export const getPathWithoutLocale = (path: string) => {
   // if path is empty or has only one segment ('/') we don't need to do anything
